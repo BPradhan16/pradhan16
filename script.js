@@ -1,3 +1,7 @@
+function openJournal() {
+    document.getElementById("journal").style.display = "block";
+}
+
 function saveTrade() {
     const symbol = document.getElementById("symbol").value;
     const entry = document.getElementById("entry").value;
