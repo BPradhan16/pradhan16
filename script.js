@@ -7,6 +7,14 @@ function saveTrade() {
     const entry = document.getElementById("entry").value;
     const exit = document.getElementById("exit").value;
 
+    const trade = {
+        symbol: symbol,
+        entry: entry,
+        exit: exit
+    };
+
+    localStorage.setItem("pradhan16_trade", JSON.stringify(trade));
+
     document.getElementById("tradeMessage").innerText =
-        "Trade saved: " + symbol + " | Entry: " + entry + " | Exit: " + exit;
+        "Trade saved successfully!";
 }
