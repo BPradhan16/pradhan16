@@ -1,3 +1,3 @@
 function openJournal() {
-    alert("Welcome to Pradhan16 AI Trading Journal!");
+    document.getElementById("journal").style.display = "block";
 }
