@@ -17,7 +17,7 @@ p {
     font-size: 18px;
 }
 
-button { border-radius: 8px; }
+button { border-radius: 8px; 
     padding: 12px 20px;
     font-size: 16px;
     cursor: pointer;
