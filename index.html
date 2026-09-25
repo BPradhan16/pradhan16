@@ -10,7 +10,22 @@
 
     <h2>AI Trading Journal</h2>
 
-    <p>Track your trades. Learn from your mistakes. Build better habits.</p>
+    <div id="journal" style="display: none;">
+    <h2>My Trading Journal</h2>
+
+    <input type="text" id="symbol" placeholder="Symbol e.g. NIFTY">
+    <br><br>
+
+    <input type="number" id="entry" placeholder="Entry Price">
+    <br><br>
+
+    <input type="number" id="exit" placeholder="Exit Price">
+    <br><br>
+
+    <button onclick="saveTrade()">Save Trade</button>
+
+    <p id="tradeMessage"></p>
+</div>
     <script src="script.js"></script>
     <button onclick="openJournal()">Open Trading Journal</button>
 
