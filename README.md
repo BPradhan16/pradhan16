@@ -1,2 +1,5 @@
-# pradhan16
-Pradhan16 AI — Trading Journal &amp; Educational Tools
+# Pradhan16 AI
+
+Trading Journal & Educational Tools.
+
+Educational project — not investment advice.
