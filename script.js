@@ -18,3 +18,13 @@ function saveTrade() {
     document.getElementById("tradeMessage").innerText =
         "Trade saved successfully!";
 }
+function calculatePL() {
+    const entry = Number(document.getElementById("entry").value);
+    const exit = Number(document.getElementById("exit").value);
+    const quantity = Number(document.getElementById("quantity").value);
+
+    const profitLoss = (exit - entry) * quantity;
+
+    document.getElementById("plMessage").innerText =
+        "P/L: ₹" + profitLoss;
+}
