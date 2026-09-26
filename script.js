@@ -94,3 +94,14 @@ function openReview() {
         <strong>Date:</strong> ${trade.date}
     `;
 }
+let trade = {
+    symbol: "NIFTY",
+    entry: 100,
+    exit: 120,
+    quantity: 50
+};
+
+localStorage.setItem(
+    "trade",
+    JSON.stringify(trade)
+);
