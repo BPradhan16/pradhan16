@@ -113,3 +113,35 @@ function openReview() {
 
     reviewMessage.innerHTML = html;
 }
+// ================================
+// DAY 19 — TRADE STATISTICS
+// ================================
+
+function getTradeStats() {
+    const trades = JSON.parse(
+        localStorage.getItem("pradhan16_trades") || "[]"
+    );
+
+    let totalPL = 0;
+    let wins = 0;
+    let losses = 0;
+
+    trades.forEach(trade => {
+        const pl = Number(trade.pl || 0);
+
+        totalPL += pl;
+
+        if (pl > 0) {
+            wins++;
+        } else if (pl < 0) {
+            losses++;
+        }
+    });
+
+    return {
+        totalTrades: trades.length,
+        totalPL: totalPL,
+        wins: wins,
+        losses: losses
+    };
+}
