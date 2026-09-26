@@ -497,3 +497,73 @@ function calculateStatistics() {
    ========================================= */
 
 calculateStatistics();
+/* =========================================
+   Pradhan16 AI — Day 21
+   P/L Performance Chart
+   ========================================= */
+
+let plChart = null;
+
+function createPLChart() {
+
+    const trades = JSON.parse(
+        localStorage.getItem("pradhan16_trades") || "[]"
+    );
+
+    const canvas = document.getElementById("plChart");
+
+    if (!canvas) {
+        return;
+    }
+
+    const labels = trades.map((trade, index) =>
+        "Trade " + (index + 1)
+    );
+
+    const profitLoss = trades.map(trade =>
+        Number(trade.profitLoss) || 0
+    );
+
+
+    // Destroy old chart before creating new one
+    if (plChart) {
+        plChart.destroy();
+    }
+
+
+    plChart = new Chart(canvas, {
+
+        type: "bar",
+
+        data: {
+
+            labels: labels,
+
+            datasets: [{
+                label: "Profit / Loss",
+
+                data: profitLoss
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            scales: {
+
+                y: {
+                    beginAtZero: true
+                }
+
+            }
+
+        }
+
+    });
+}
+
+
+/* Run chart when app loads */
+createPLChart();
