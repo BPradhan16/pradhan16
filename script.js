@@ -94,3 +94,13 @@ function openReview() {
         <strong>Date:</strong> ${trade.date}
     `;
 }
+let trades = JSON.parse(
+    localStorage.getItem("pradhan16_trades") || "[]"
+);
+
+trades.push(trade);
+
+localStorage.setItem(
+    "pradhan16_trades",
+    JSON.stringify(trades)
+);
