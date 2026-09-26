@@ -1,24 +1,108 @@
+/* =========================================
+   Pradhan16 AI — Mobile Responsive CSS
+   ========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    margin-top: 80px;
+    margin: 0;
+    padding: 30px 15px;
     background: #f5f5f5;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 h1 {
     font-size: 40px;
+    margin-bottom: 10px;
 }
 
 h2 {
     font-size: 26px;
+    margin-bottom: 25px;
 }
 
 p {
     font-size: 18px;
+    line-height: 1.6;
 }
 
-button { border-radius: 8px; 
-    padding: 12px 20px;
+/* Input fields */
+
+input {
+    display: block;
+    width: 100%;
+    max-width: 450px;
+    margin: 12px auto;
+    padding: 14px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+/* Buttons */
+
+button {
+    width: 100%;
+    max-width: 450px;
+    margin: 10px auto;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 20px;
     font-size: 16px;
     cursor: pointer;
+}
+
+/* Journal */
+
+#journal {
+    margin-top: 25px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+}
+
+/* Review */
+
+#review {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    text-align: left;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 20px 12px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    #journal {
+        padding: 15px;
+    }
+
+    input,
+    button {
+        width: 100%;
+        font-size: 16px;
+    }
 }
