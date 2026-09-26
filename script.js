@@ -145,3 +145,95 @@ function getTradeStats() {
         losses: losses
     };
 }
+/* =========================================
+   Pradhan16 AI — Trading Statistics
+   Day 20: Statistics Engine
+   ========================================= */
+
+function calculateStatistics() {
+
+    const totalTrades = trades.length;
+
+    let winningTrades = 0;
+    let losingTrades = 0;
+    let grossProfit = 0;
+    let grossLoss = 0;
+
+    trades.forEach(trade => {
+
+        const pl = Number(trade.pl) || 0;
+
+        if (pl > 0) {
+            winningTrades++;
+            grossProfit += pl;
+        }
+
+        if (pl < 0) {
+            losingTrades++;
+            grossLoss += Math.abs(pl);
+        }
+    });
+
+    const winRate =
+        totalTrades > 0
+            ? (winningTrades / totalTrades) * 100
+            : 0;
+
+    const averageProfit =
+        winningTrades > 0
+            ? grossProfit / winningTrades
+            : 0;
+
+    const averageLoss =
+        losingTrades > 0
+            ? grossLoss / losingTrades
+            : 0;
+
+    const profitFactor =
+        grossLoss > 0
+            ? grossProfit / grossLoss
+            : 0;
+
+    const lossRate =
+        totalTrades > 0
+            ? losingTrades / totalTrades
+            : 0;
+
+    const expectancy =
+        (winRate / 100 * averageProfit) -
+        (lossRate * averageLoss);
+
+    document.getElementById("totalTrades").textContent =
+        totalTrades;
+
+    document.getElementById("winningTrades").textContent =
+        winningTrades;
+
+    document.getElementById("losingTrades").textContent =
+        losingTrades;
+
+    document.getElementById("winRate").textContent =
+        winRate.toFixed(2) + "%";
+
+    document.getElementById("grossProfit").textContent =
+        grossProfit.toFixed(2);
+
+    document.getElementById("grossLoss").textContent =
+        grossLoss.toFixed(2);
+
+    document.getElementById("averageProfit").textContent =
+        averageProfit.toFixed(2);
+
+    document.getElementById("averageLoss").textContent =
+        averageLoss.toFixed(2);
+
+    document.getElementById("profitFactor").textContent =
+        profitFactor.toFixed(2);
+
+    document.getElementById("expectancy").textContent =
+        expectancy.toFixed(2);
+}
+
+
+/* Update statistics whenever page loads */
+calculateStatistics();
