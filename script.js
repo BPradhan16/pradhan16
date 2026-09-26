@@ -1,5 +1,6 @@
 /* =========================================
    Pradhan16 AI — Trading Journal
+   Day 18: Multiple Trades + LocalStorage
    ========================================= */
 
 // Open Trading Journal
@@ -53,10 +54,18 @@ function saveTrade() {
         date: new Date().toLocaleString()
     };
 
-    // Save trade in browser
+    // Get existing trades
+    let trades = JSON.parse(
+        localStorage.getItem("pradhan16_trades") || "[]"
+    );
+
+    // Add new trade
+    trades.push(trade);
+
+    // Save all trades
     localStorage.setItem(
-        "pradhan16_trade",
-        JSON.stringify(trade)
+        "pradhan16_trades",
+        JSON.stringify(trades)
     );
 
     document.getElementById("tradeMessage").innerText =
@@ -70,37 +79,37 @@ function openReview() {
     const review = document.getElementById("review");
     const reviewMessage = document.getElementById("reviewMessage");
 
-    const savedTrade =
-        localStorage.getItem("pradhan16_trade");
+    const trades = JSON.parse(
+        localStorage.getItem("pradhan16_trades") || "[]"
+    );
 
     review.style.display = "block";
 
-    if (!savedTrade) {
+    if (trades.length === 0) {
 
         reviewMessage.innerText =
-            "No saved trade found.";
+            "No saved trades found.";
 
         return;
     }
 
-    const trade = JSON.parse(savedTrade);
+    let html = "<h3>Trade History</h3>";
 
-    reviewMessage.innerHTML = `
-        <strong>Symbol:</strong> ${trade.symbol}<br>
-        <strong>Entry:</strong> ₹${trade.entry}<br>
-        <strong>Exit:</strong> ₹${trade.exit}<br>
-        <strong>Quantity:</strong> ${trade.quantity}<br>
-        <strong>P/L:</strong> ₹${trade.profitLoss.toFixed(2)}<br>
-        <strong>Date:</strong> ${trade.date}
-    `;
+    trades.forEach((trade, index) => {
+
+        html += `
+            <div>
+                <strong>Trade ${index + 1}</strong><br>
+                Symbol: ${trade.symbol}<br>
+                Entry: ₹${trade.entry}<br>
+                Exit: ₹${trade.exit}<br>
+                Quantity: ${trade.quantity}<br>
+                P/L: ₹${trade.profitLoss.toFixed(2)}<br>
+                Date: ${trade.date}
+                <hr>
+            </div>
+        `;
+    });
+
+    reviewMessage.innerHTML = html;
 }
-let trades = JSON.parse(
-    localStorage.getItem("pradhan16_trades") || "[]"
-);
-
-trades.push(trade);
-
-localStorage.setItem(
-    "pradhan16_trades",
-    JSON.stringify(trades)
-);
