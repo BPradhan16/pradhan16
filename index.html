@@ -1,39 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pradhan16 AI</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
-    <title>update homepage</title>
-</head>
-<link rel="stylesheet" href="style.css">
+
 <body>
 
-    <h1>Pradhan16 AI</h1>
+    <div class="container">
 
-    <h2>AI Trading Journal</h2>
+        <h1>Pradhan16 AI</h1>
+        <h2>AI Trading Journal</h2>
 
-    <div id="journal" style="display: none;">
-    <h2>My Trading Journal</h2>
+        <button onclick="openJournal()">
+            Open Trading Journal
+        </button>
 
-    <input type="text" id="symbol" placeholder="Symbol e.g. NIFTY">
-    <br><br>
+        <div id="journal" style="display: none;">
 
-    <input type="number" id="entry" placeholder="Entry Price">
-    <br><br>
+            <h2>My Trading Journal</h2>
 
-    <input type="number" id="exit" placeholder="Exit Price">
-    <br><br>
+            <input
+                type="text"
+                id="symbol"
+                placeholder="Symbol e.g. NIFTY"
+            >
 
-    <button onclick="saveTrade()">Save Trade</button>
+            <input
+                type="number"
+                id="entry"
+                placeholder="Entry Price"
+            >
 
-    <p id="tradeMessage"></p>
-</div>
+            <input
+                type="number"
+                id="exit"
+                placeholder="Exit Price"
+            >
+
+            <input
+                type="number"
+                id="quantity"
+                placeholder="Quantity"
+            >
+
+            <button onclick="calculatePL()">
+                Calculate P/L
+            </button>
+
+            <p id="plMessage"></p>
+
+            <button onclick="saveTrade()">
+                Save Trade
+            </button>
+
+            <p id="tradeMessage"></p>
+
+            <button onclick="openReview()">
+                Review
+            </button>
+
+            <div id="review" style="display: none;">
+                <h2>Trade Review</h2>
+                <p id="reviewMessage"></p>
+            </div>
+
+        </div>
+
+    </div>
+
     <script src="script.js"></script>
-    <button onclick="openJournal()">Open Trading Journal</button>
 
 </body>
 </html>
-<input type="number" id="quantity" placeholder="Quantity">
-<br><br>
-
-<button onclick="calculatePL()">Calculate P/L</button>
-
-<p id="plMessage"></p>
