@@ -1,15 +1,22 @@
 /* =========================================
    Pradhan16 AI — Trading Journal
-   Day 18: Multiple Trades + LocalStorage
+   Day 20: Journal + Review + Statistics
    ========================================= */
 
-// Open Trading Journal
+
+/* =========================================
+   OPEN TRADING JOURNAL
+   ========================================= */
+
 function openJournal() {
     document.getElementById("journal").style.display = "block";
 }
 
 
-// Calculate Profit / Loss
+/* =========================================
+   CALCULATE PROFIT / LOSS
+   ========================================= */
+
 function calculatePL() {
 
     const entry = Number(document.getElementById("entry").value);
@@ -17,8 +24,10 @@ function calculatePL() {
     const quantity = Number(document.getElementById("quantity").value);
 
     if (!entry || !exit || !quantity) {
+
         document.getElementById("plMessage").innerText =
             "Please enter Entry, Exit and Quantity.";
+
         return;
     }
 
@@ -29,62 +38,107 @@ function calculatePL() {
 }
 
 
-// Save Trade
+/* =========================================
+   SAVE TRADE
+   ========================================= */
+
 function saveTrade() {
 
-    const symbol = document.getElementById("symbol").value.trim();
-    const entry = Number(document.getElementById("entry").value);
-    const exit = Number(document.getElementById("exit").value);
-    const quantity = Number(document.getElementById("quantity").value);
+    const symbol =
+        document.getElementById("symbol").value.trim();
+
+    const entry =
+        Number(document.getElementById("entry").value);
+
+    const exit =
+        Number(document.getElementById("exit").value);
+
+    const quantity =
+        Number(document.getElementById("quantity").value);
+
 
     if (!symbol || !entry || !exit || !quantity) {
+
         document.getElementById("tradeMessage").innerText =
             "Please fill all trade details.";
+
         return;
     }
 
-    const profitLoss = (exit - entry) * quantity;
 
+    // Calculate P/L
+    const profitLoss =
+        (exit - entry) * quantity;
+
+
+    // Create trade object
     const trade = {
+
         symbol: symbol,
+
         entry: entry,
+
         exit: exit,
+
         quantity: quantity,
+
         profitLoss: profitLoss,
+
         date: new Date().toLocaleString()
+
     };
+
 
     // Get existing trades
     let trades = JSON.parse(
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
+
     // Add new trade
     trades.push(trade);
 
-    // Save all trades
+
+    // Save trades
     localStorage.setItem(
         "pradhan16_trades",
         JSON.stringify(trades)
     );
 
+
+    // Success message
     document.getElementById("tradeMessage").innerText =
         "✅ Trade saved successfully!";
+
+
+    // Update Statistics immediately
+    calculateStatistics();
 }
 
 
-// Open Trade Review
+/* =========================================
+   OPEN TRADE REVIEW
+   ========================================= */
+
 function openReview() {
 
-    const review = document.getElementById("review");
-    const reviewMessage = document.getElementById("reviewMessage");
+    const review =
+        document.getElementById("review");
 
+    const reviewMessage =
+        document.getElementById("reviewMessage");
+
+
+    // Get saved trades
     const trades = JSON.parse(
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
+
     review.style.display = "block";
 
+
+    // No trades
     if (trades.length === 0) {
 
         reviewMessage.innerText =
@@ -93,147 +147,353 @@ function openReview() {
         return;
     }
 
+
+    // Trade history
     let html = "<h3>Trade History</h3>";
+
 
     trades.forEach((trade, index) => {
 
         html += `
             <div>
+
                 <strong>Trade ${index + 1}</strong><br>
+
                 Symbol: ${trade.symbol}<br>
+
                 Entry: ₹${trade.entry}<br>
+
                 Exit: ₹${trade.exit}<br>
+
                 Quantity: ${trade.quantity}<br>
-                P/L: ₹${trade.profitLoss.toFixed(2)}<br>
+
+                P/L: ₹${Number(trade.profitLoss).toFixed(2)}<br>
+
                 Date: ${trade.date}
+
                 <hr>
+
             </div>
         `;
+
     });
+
 
     reviewMessage.innerHTML = html;
 }
-// ================================
-// DAY 19 — TRADE STATISTICS
-// ================================
+
+
+/* =========================================
+   DAY 19 — BASIC TRADE STATISTICS
+   ========================================= */
 
 function getTradeStats() {
+
     const trades = JSON.parse(
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
+
     let totalPL = 0;
+
     let wins = 0;
+
     let losses = 0;
 
+
     trades.forEach(trade => {
-        const pl = Number(trade.pl || 0);
+
+        const pl =
+            Number(trade.profitLoss) || 0;
+
 
         totalPL += pl;
 
+
         if (pl > 0) {
+
             wins++;
+
         } else if (pl < 0) {
+
             losses++;
+
         }
+
     });
 
+
     return {
+
         totalTrades: trades.length,
+
         totalPL: totalPL,
+
         wins: wins,
+
         losses: losses
+
     };
 }
+
+
 /* =========================================
-   Pradhan16 AI — Trading Statistics
-   Day 20: Statistics Engine
+   DAY 20 — TRADING STATISTICS
    ========================================= */
 
 function calculateStatistics() {
 
-    const totalTrades = trades.length;
+
+    // Get saved trades
+    const trades = JSON.parse(
+        localStorage.getItem("pradhan16_trades") || "[]"
+    );
+
+
+    const totalTrades =
+        trades.length;
+
 
     let winningTrades = 0;
+
     let losingTrades = 0;
+
     let grossProfit = 0;
+
     let grossLoss = 0;
+
+
+    /* -----------------------------------------
+       Calculate each trade
+       ----------------------------------------- */
 
     trades.forEach(trade => {
 
-        const pl = Number(trade.pl) || 0;
 
+        // IMPORTANT:
+        // Saved trade field = profitLoss
+        const pl =
+            Number(trade.profitLoss) || 0;
+
+
+        // Winning trade
         if (pl > 0) {
+
             winningTrades++;
+
             grossProfit += pl;
+
         }
 
+
+        // Losing trade
         if (pl < 0) {
+
             losingTrades++;
+
             grossLoss += Math.abs(pl);
+
         }
+
     });
 
+
+    /* -----------------------------------------
+       Win Rate
+       ----------------------------------------- */
+
     const winRate =
+
         totalTrades > 0
+
             ? (winningTrades / totalTrades) * 100
+
             : 0;
+
+
+    /* -----------------------------------------
+       Average Profit
+       ----------------------------------------- */
 
     const averageProfit =
+
         winningTrades > 0
+
             ? grossProfit / winningTrades
+
             : 0;
+
+
+    /* -----------------------------------------
+       Average Loss
+       ----------------------------------------- */
 
     const averageLoss =
+
         losingTrades > 0
+
             ? grossLoss / losingTrades
+
             : 0;
+
+
+    /* -----------------------------------------
+       Profit Factor
+       ----------------------------------------- */
 
     const profitFactor =
+
         grossLoss > 0
+
             ? grossProfit / grossLoss
+
             : 0;
+
+
+    /* -----------------------------------------
+       Loss Rate
+       ----------------------------------------- */
 
     const lossRate =
+
         totalTrades > 0
+
             ? losingTrades / totalTrades
+
             : 0;
 
+
+    /* -----------------------------------------
+       Expectancy
+       ----------------------------------------- */
+
     const expectancy =
-        (winRate / 100 * averageProfit) -
+
+        (winRate / 100 * averageProfit)
+
+        -
+
         (lossRate * averageLoss);
 
-    document.getElementById("totalTrades").textContent =
-        totalTrades;
 
-    document.getElementById("winningTrades").textContent =
-        winningTrades;
+    /* =========================================
+       DISPLAY STATISTICS
+       ========================================= */
 
-    document.getElementById("losingTrades").textContent =
-        losingTrades;
 
-    document.getElementById("winRate").textContent =
-        winRate.toFixed(2) + "%";
+    // Total Trades
+    const totalTradesElement =
+        document.getElementById("totalTrades");
 
-    document.getElementById("grossProfit").textContent =
-        grossProfit.toFixed(2);
+    if (totalTradesElement) {
 
-    document.getElementById("grossLoss").textContent =
-        grossLoss.toFixed(2);
+        totalTradesElement.textContent =
+            totalTrades;
+    }
 
-    document.getElementById("averageProfit").textContent =
-        averageProfit.toFixed(2);
 
-    document.getElementById("averageLoss").textContent =
-        averageLoss.toFixed(2);
+    // Winning Trades
+    const winningTradesElement =
+        document.getElementById("winningTrades");
 
-    document.getElementById("profitFactor").textContent =
-        profitFactor.toFixed(2);
+    if (winningTradesElement) {
 
-    document.getElementById("expectancy").textContent =
-        expectancy.toFixed(2);
+        winningTradesElement.textContent =
+            winningTrades;
+    }
+
+
+    // Losing Trades
+    const losingTradesElement =
+        document.getElementById("losingTrades");
+
+    if (losingTradesElement) {
+
+        losingTradesElement.textContent =
+            losingTrades;
+    }
+
+
+    // Win Rate
+    const winRateElement =
+        document.getElementById("winRate");
+
+    if (winRateElement) {
+
+        winRateElement.textContent =
+            winRate.toFixed(2) + "%";
+    }
+
+
+    // Gross Profit
+    const grossProfitElement =
+        document.getElementById("grossProfit");
+
+    if (grossProfitElement) {
+
+        grossProfitElement.textContent =
+            grossProfit.toFixed(2);
+    }
+
+
+    // Gross Loss
+    const grossLossElement =
+        document.getElementById("grossLoss");
+
+    if (grossLossElement) {
+
+        grossLossElement.textContent =
+            grossLoss.toFixed(2);
+    }
+
+
+    // Average Profit
+    const averageProfitElement =
+        document.getElementById("averageProfit");
+
+    if (averageProfitElement) {
+
+        averageProfitElement.textContent =
+            averageProfit.toFixed(2);
+    }
+
+
+    // Average Loss
+    const averageLossElement =
+        document.getElementById("averageLoss");
+
+    if (averageLossElement) {
+
+        averageLossElement.textContent =
+            averageLoss.toFixed(2);
+    }
+
+
+    // Profit Factor
+    const profitFactorElement =
+        document.getElementById("profitFactor");
+
+    if (profitFactorElement) {
+
+        profitFactorElement.textContent =
+            profitFactor.toFixed(2);
+    }
+
+
+    // Expectancy
+    const expectancyElement =
+        document.getElementById("expectancy");
+
+    if (expectancyElement) {
+
+        expectancyElement.textContent =
+            expectancy.toFixed(2);
+    }
 }
 
 
-/* Update statistics whenever page loads */
+/* =========================================
+   RUN STATISTICS WHEN APP LOADS
+   ========================================= */
+
 calculateStatistics();
