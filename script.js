@@ -497,6 +497,7 @@ function calculateStatistics() {
    ========================================= */
 
 calculateStatistics();
+updateEquityChart();
 /* =========================================
    Pradhan16 AI — Day 21
    P/L Performance Chart
