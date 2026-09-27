@@ -1,6 +1,9 @@
 /* =========================================
    Pradhan16 AI — Trading Journal
-   Day 20: Journal + Review + Statistics
+   Day 20: Statistics
+   Day 21: P/L Performance Chart
+   Day 23: Equity Curve
+   Day 24: Drawdown Analysis
    ========================================= */
 
 
@@ -24,10 +27,8 @@ function calculatePL() {
     const quantity = Number(document.getElementById("quantity").value);
 
     if (!entry || !exit || !quantity) {
-
         document.getElementById("plMessage").innerText =
             "Please enter Entry, Exit and Quantity.";
-
         return;
     }
 
@@ -66,53 +67,45 @@ function saveTrade() {
     }
 
 
-    // Calculate P/L
     const profitLoss =
         (exit - entry) * quantity;
 
 
-    // Create trade object
     const trade = {
 
         symbol: symbol,
-
         entry: entry,
-
         exit: exit,
-
         quantity: quantity,
-
         profitLoss: profitLoss,
-
         date: new Date().toLocaleString()
 
     };
 
 
-    // Get existing trades
     let trades = JSON.parse(
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
 
-    // Add new trade
     trades.push(trade);
 
 
-    // Save trades
     localStorage.setItem(
         "pradhan16_trades",
         JSON.stringify(trades)
     );
 
 
-    // Success message
     document.getElementById("tradeMessage").innerText =
         "✅ Trade saved successfully!";
 
 
-    // Update Statistics immediately
+    // Update everything
     calculateStatistics();
+    createPLChart();
+    updateEquityChart();
+    calculateDrawdown();
 }
 
 
@@ -129,7 +122,6 @@ function openReview() {
         document.getElementById("reviewMessage");
 
 
-    // Get saved trades
     const trades = JSON.parse(
         localStorage.getItem("pradhan16_trades") || "[]"
     );
@@ -138,7 +130,6 @@ function openReview() {
     review.style.display = "block";
 
 
-    // No trades
     if (trades.length === 0) {
 
         reviewMessage.innerText =
@@ -148,7 +139,6 @@ function openReview() {
     }
 
 
-    // Trade history
     let html = "<h3>Trade History</h3>";
 
 
@@ -195,9 +185,7 @@ function getTradeStats() {
 
 
     let totalPL = 0;
-
     let wins = 0;
-
     let losses = 0;
 
 
@@ -206,18 +194,15 @@ function getTradeStats() {
         const pl =
             Number(trade.profitLoss) || 0;
 
-
         totalPL += pl;
 
 
         if (pl > 0) {
-
             wins++;
+        }
 
-        } else if (pl < 0) {
-
+        else if (pl < 0) {
             losses++;
-
         }
 
     });
@@ -226,11 +211,8 @@ function getTradeStats() {
     return {
 
         totalTrades: trades.length,
-
         totalPL: totalPL,
-
         wins: wins,
-
         losses: losses
 
     };
@@ -243,40 +225,27 @@ function getTradeStats() {
 
 function calculateStatistics() {
 
-
-    // Get saved trades
     const trades = JSON.parse(
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
 
-    const totalTrades =
-        trades.length;
+    const totalTrades = trades.length;
 
 
     let winningTrades = 0;
-
     let losingTrades = 0;
 
     let grossProfit = 0;
-
     let grossLoss = 0;
 
 
-    /* -----------------------------------------
-       Calculate each trade
-       ----------------------------------------- */
-
     trades.forEach(trade => {
 
-
-        // IMPORTANT:
-        // Saved trade field = profitLoss
         const pl =
             Number(trade.profitLoss) || 0;
 
 
-        // Winning trade
         if (pl > 0) {
 
             winningTrades++;
@@ -286,7 +255,6 @@ function calculateStatistics() {
         }
 
 
-        // Losing trade
         if (pl < 0) {
 
             losingTrades++;
@@ -298,240 +266,172 @@ function calculateStatistics() {
     });
 
 
-    /* -----------------------------------------
-       Win Rate
-       ----------------------------------------- */
-
     const winRate =
 
         totalTrades > 0
-
             ? (winningTrades / totalTrades) * 100
-
             : 0;
 
-
-    /* -----------------------------------------
-       Average Profit
-       ----------------------------------------- */
 
     const averageProfit =
 
         winningTrades > 0
-
             ? grossProfit / winningTrades
-
             : 0;
 
-
-    /* -----------------------------------------
-       Average Loss
-       ----------------------------------------- */
 
     const averageLoss =
 
         losingTrades > 0
-
             ? grossLoss / losingTrades
-
             : 0;
 
-
-    /* -----------------------------------------
-       Profit Factor
-       ----------------------------------------- */
 
     const profitFactor =
 
         grossLoss > 0
-
             ? grossProfit / grossLoss
-
             : 0;
 
-
-    /* -----------------------------------------
-       Loss Rate
-       ----------------------------------------- */
 
     const lossRate =
 
         totalTrades > 0
-
             ? losingTrades / totalTrades
-
             : 0;
 
-
-    /* -----------------------------------------
-       Expectancy
-       ----------------------------------------- */
 
     const expectancy =
 
         (winRate / 100 * averageProfit)
-
         -
-
         (lossRate * averageLoss);
 
 
-    /* =========================================
-       DISPLAY STATISTICS
-       ========================================= */
+    /* -----------------------------------------
+       DISPLAY
+       ----------------------------------------- */
 
-
-    // Total Trades
     const totalTradesElement =
         document.getElementById("totalTrades");
 
-    if (totalTradesElement) {
-
-        totalTradesElement.textContent =
-            totalTrades;
-    }
+    if (totalTradesElement)
+        totalTradesElement.textContent = totalTrades;
 
 
-    // Winning Trades
     const winningTradesElement =
         document.getElementById("winningTrades");
 
-    if (winningTradesElement) {
-
-        winningTradesElement.textContent =
-            winningTrades;
-    }
+    if (winningTradesElement)
+        winningTradesElement.textContent = winningTrades;
 
 
-    // Losing Trades
     const losingTradesElement =
         document.getElementById("losingTrades");
 
-    if (losingTradesElement) {
-
-        losingTradesElement.textContent =
-            losingTrades;
-    }
+    if (losingTradesElement)
+        losingTradesElement.textContent = losingTrades;
 
 
-    // Win Rate
     const winRateElement =
         document.getElementById("winRate");
 
-    if (winRateElement) {
-
+    if (winRateElement)
         winRateElement.textContent =
             winRate.toFixed(2) + "%";
-    }
 
 
-    // Gross Profit
     const grossProfitElement =
         document.getElementById("grossProfit");
 
-    if (grossProfitElement) {
-
+    if (grossProfitElement)
         grossProfitElement.textContent =
             grossProfit.toFixed(2);
-    }
 
 
-    // Gross Loss
     const grossLossElement =
         document.getElementById("grossLoss");
 
-    if (grossLossElement) {
-
+    if (grossLossElement)
         grossLossElement.textContent =
             grossLoss.toFixed(2);
-    }
 
 
-    // Average Profit
     const averageProfitElement =
         document.getElementById("averageProfit");
 
-    if (averageProfitElement) {
-
+    if (averageProfitElement)
         averageProfitElement.textContent =
             averageProfit.toFixed(2);
-    }
 
 
-    // Average Loss
     const averageLossElement =
         document.getElementById("averageLoss");
 
-    if (averageLossElement) {
-
+    if (averageLossElement)
         averageLossElement.textContent =
             averageLoss.toFixed(2);
-    }
 
 
-    // Profit Factor
     const profitFactorElement =
         document.getElementById("profitFactor");
 
-    if (profitFactorElement) {
-
+    if (profitFactorElement)
         profitFactorElement.textContent =
             profitFactor.toFixed(2);
-    }
 
 
-    // Expectancy
     const expectancyElement =
         document.getElementById("expectancy");
 
-    if (expectancyElement) {
-
+    if (expectancyElement)
         expectancyElement.textContent =
             expectancy.toFixed(2);
-    }
 }
 
 
 /* =========================================
-   RUN STATISTICS WHEN APP LOADS
-   ========================================= */
-
-calculateStatistics();
-calculateStatistics();
-createPLChart();
-updateEquityChart();
-calculateDrawdown();
-/* =========================================
-   Pradhan16 AI — Day 21
-   P/L Performance Chart
+   DAY 21 — P/L PERFORMANCE CHART
    ========================================= */
 
 let plChart = null;
 
+
 function createPLChart() {
 
-    const trades = JSON.parse(
-        localStorage.getItem("pradhan16_trades") || "[]"
-    );
+    const canvas =
+        document.getElementById("plChart");
 
-    const canvas = document.getElementById("plChart");
 
     if (!canvas) {
         return;
     }
 
+
+    const trades = JSON.parse(
+        localStorage.getItem("pradhan16_trades") || "[]"
+    );
+
+
     const labels = trades.map((trade, index) =>
         "Trade " + (index + 1)
     );
+
 
     const profitLoss = trades.map(trade =>
         Number(trade.profitLoss) || 0
     );
 
 
-    // Destroy old chart before creating new one
     if (plChart) {
         plChart.destroy();
+    }
+
+
+    // Check Chart.js
+    if (typeof Chart === "undefined") {
+        console.error("Chart.js not loaded.");
+        return;
     }
 
 
@@ -544,9 +444,11 @@ function createPLChart() {
             labels: labels,
 
             datasets: [{
+
                 label: "Profit / Loss",
 
                 data: profitLoss
+
             }]
 
         },
@@ -569,56 +471,76 @@ function createPLChart() {
 }
 
 
-/* Run chart when app loads */
-createPLChart();
 /* =========================================
-   Day 23 — Equity Curve
+   DAY 23 — EQUITY CURVE
    ========================================= */
 
-let equityChart;
+let equityChart = null;
+
 
 function updateEquityChart() {
+
+    const canvas =
+        document.getElementById("equityChart");
+
+
+    if (!canvas) {
+        return;
+    }
+
 
     const trades = JSON.parse(
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
+
     let cumulativePL = 0;
+
 
     const labels = [];
     const equityData = [];
 
+
     trades.forEach((trade, index) => {
 
-        const pl = Number(
-            trade.pl ??
-            trade.pnl ??
-            trade.profitLoss ??
-            0
-        );
+        const pl =
+            Number(trade.profitLoss) || 0;
+
 
         cumulativePL += pl;
 
-        labels.push("Trade " + (index + 1));
+
+        labels.push(
+            "Trade " + (index + 1)
+        );
+
+
         equityData.push(cumulativePL);
+
     });
 
-    const canvas = document.getElementById("equityChart");
-
-    if (!canvas) return;
 
     if (equityChart) {
         equityChart.destroy();
     }
+
+
+    if (typeof Chart === "undefined") {
+        console.error("Chart.js not loaded.");
+        return;
+    }
+
 
     equityChart = new Chart(canvas, {
 
         type: "line",
 
         data: {
+
             labels: labels,
 
             datasets: [{
+
                 label: "Cumulative P&L",
 
                 data: equityData,
@@ -630,43 +552,51 @@ function updateEquityChart() {
                 borderWidth: 2,
 
                 pointRadius: 4
+
             }]
+
         },
 
         options: {
 
             responsive: true,
 
-            plugins: {
-                legend: {
-                    display: true
-                }
-            },
-
             scales: {
 
                 y: {
-                    beginAtZero: false,
 
                     title: {
+
                         display: true,
+
                         text: "P&L (₹)"
+
                     }
+
                 },
 
                 x: {
+
                     title: {
+
                         display: true,
+
                         text: "Trades"
+
                     }
+
                 }
+
             }
+
         }
+
     });
 }
+
+
 /* =========================================
-   Pradhan16 AI — Day 24
-   Drawdown Analysis
+   DAY 24 — DRAWDOWN ANALYSIS
    ========================================= */
 
 function calculateDrawdown() {
@@ -675,43 +605,52 @@ function calculateDrawdown() {
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
+
     let cumulativePL = 0;
     let peakPL = 0;
 
     let currentDrawdown = 0;
     let maxDrawdown = 0;
+
     let maxDrawdownPeak = 0;
     let maxDrawdownBottom = 0;
 
+
     trades.forEach(trade => {
 
-        const pl = Number(trade.profitLoss) || 0;
+        const pl =
+            Number(trade.profitLoss) || 0;
+
 
         cumulativePL += pl;
 
-        // New peak
+
         if (cumulativePL > peakPL) {
+
             peakPL = cumulativePL;
+
         }
 
-        // Current drawdown
-        currentDrawdown = peakPL - cumulativePL;
 
-        // Maximum drawdown
+        currentDrawdown =
+            peakPL - cumulativePL;
+
+
         if (currentDrawdown > maxDrawdown) {
 
-            maxDrawdown = currentDrawdown;
+            maxDrawdown =
+                currentDrawdown;
 
-            maxDrawdownPeak = peakPL;
+            maxDrawdownPeak =
+                peakPL;
 
-            maxDrawdownBottom = cumulativePL;
+            maxDrawdownBottom =
+                cumulativePL;
+
         }
+
     });
 
-
-    /* =========================================
-       Display Results
-       ========================================= */
 
     const currentDrawdownElement =
         document.getElementById("currentDrawdown");
@@ -720,6 +659,7 @@ function calculateDrawdown() {
 
         currentDrawdownElement.textContent =
             "₹" + currentDrawdown.toFixed(2);
+
     }
 
 
@@ -730,6 +670,7 @@ function calculateDrawdown() {
 
         maxDrawdownElement.textContent =
             "₹" + maxDrawdown.toFixed(2);
+
     }
 
 
@@ -740,6 +681,7 @@ function calculateDrawdown() {
 
         peakPLElement.textContent =
             "₹" + peakPL.toFixed(2);
+
     }
 
 
@@ -750,10 +692,10 @@ function calculateDrawdown() {
 
         currentPLElement.textContent =
             "₹" + cumulativePL.toFixed(2);
+
     }
 
 
-    // Return values for future features
     return {
 
         currentPL: cumulativePL,
@@ -769,21 +711,22 @@ function calculateDrawdown() {
         maxDrawdownBottom: maxDrawdownBottom
 
     };
+
 }
 
 
 /* =========================================
-   Run Drawdown Analysis
+   APP START
    ========================================= */
 
-calculateDrawdown();
-// =========================================
-// FINAL APP UPDATE
-// =========================================
-
 window.addEventListener("load", function () {
+
     calculateStatistics();
+
     createPLChart();
+
     updateEquityChart();
+
     calculateDrawdown();
+
 });
