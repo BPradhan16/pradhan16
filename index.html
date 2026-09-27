@@ -1,55 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Pradhan16 AI</title>
-    <script src="script.js"></script>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
-<!-- =========================================
-     Pradhan16 AI — Trading Statistics
-     Day 20: Statistics Dashboard
-     ========================================= -->
 
-<section id="statistics">
-    <h2>Trading Statistics</h2>
-
-    <div>
-        <p>Total Trades: <span id="totalTrades">0</span></p>
-
-        <p>Winning Trades: <span id="winningTrades">0</span></p>
-
-        <p>Losing Trades: <span id="losingTrades">0</span></p>
-
-        <p>Win Rate: <span id="winRate">0%</span></p>
-
-        <p>Gross Profit: ₹<span id="grossProfit">0</span></p>
-
-        <p>Gross Loss: ₹<span id="grossLoss">0</span></p>
-
-        <p>Average Profit: ₹<span id="averageProfit">0</span></p>
-
-        <p>Average Loss: ₹<span id="averageLoss">0</span></p>
-
-        <p>Profit Factor: <span id="profitFactor">0</span></p>
-
-        <p>Expectancy: ₹<span id="expectancy">0</span></p>
-    </div>
-</section>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <body>
 
     <div class="container">
 
         <h1>Pradhan16 AI</h1>
+
         <h2>AI Trading Journal</h2>
+
+
+        <!-- =========================================
+             TRADING JOURNAL
+             ========================================= -->
 
         <button onclick="openJournal()">
             Open Trading Journal
         </button>
+
 
         <div id="journal" style="display: none;">
 
@@ -79,11 +60,13 @@
                 placeholder="Quantity"
             >
 
+
             <button onclick="calculatePL()">
                 Calculate P/L
             </button>
 
             <p id="plMessage"></p>
+
 
             <button onclick="saveTrade()">
                 Save Trade
@@ -91,74 +74,169 @@
 
             <p id="tradeMessage"></p>
 
+
             <button onclick="openReview()">
                 Review
             </button>
 
+
             <div id="review" style="display: none;">
+
                 <h2>Trade Review</h2>
+
                 <p id="reviewMessage"></p>
+
             </div>
 
         </div>
 
+
+        <!-- =========================================
+             DAY 20 — TRADING STATISTICS
+             ========================================= -->
+
+        <section id="statistics">
+
+            <h2>Trading Statistics</h2>
+
+            <p>
+                Total Trades:
+                <span id="totalTrades">0</span>
+            </p>
+
+            <p>
+                Winning Trades:
+                <span id="winningTrades">0</span>
+            </p>
+
+            <p>
+                Losing Trades:
+                <span id="losingTrades">0</span>
+            </p>
+
+            <p>
+                Win Rate:
+                <span id="winRate">0%</span>
+            </p>
+
+            <p>
+                Gross Profit:
+                ₹<span id="grossProfit">0</span>
+            </p>
+
+            <p>
+                Gross Loss:
+                ₹<span id="grossLoss">0</span>
+            </p>
+
+            <p>
+                Average Profit:
+                ₹<span id="averageProfit">0</span>
+            </p>
+
+            <p>
+                Average Loss:
+                ₹<span id="averageLoss">0</span>
+            </p>
+
+            <p>
+                Profit Factor:
+                <span id="profitFactor">0</span>
+            </p>
+
+            <p>
+                Expectancy:
+                ₹<span id="expectancy">0</span>
+            </p>
+
+        </section>
+
+
+        <!-- =========================================
+             DAY 21 — P/L PERFORMANCE CHART
+             ========================================= -->
+
+        <section id="performanceChart">
+
+            <h2>📊 P/L Performance</h2>
+
+            <canvas id="plChart"></canvas>
+
+        </section>
+
+
+        <!-- =========================================
+             DAY 23 — EQUITY CURVE
+             ========================================= -->
+
+        <section id="equityChartSection"
+                 class="dashboard-card">
+
+            <h2>📈 Equity Curve</h2>
+
+            <p>
+                Cumulative P&L from your saved trades
+            </p>
+
+            <canvas id="equityChart"></canvas>
+
+        </section>
+
+
+        <!-- =========================================
+             DAY 24 — DRAWDOWN ANALYSIS
+             ========================================= -->
+
+        <section class="dashboard-card">
+
+            <h2>📉 Drawdown Analysis</h2>
+
+            <p>
+                Current Drawdown:
+                <strong id="currentDrawdown">
+                    ₹0.00
+                </strong>
+            </p>
+
+            <p>
+                Maximum Drawdown:
+                <strong id="maxDrawdown">
+                    ₹0.00
+                </strong>
+            </p>
+
+            <p>
+                Peak P&L:
+                <strong id="peakPL">
+                    ₹0.00
+                </strong>
+            </p>
+
+            <p>
+                Current P&L:
+                <strong id="currentPL">
+                    ₹0.00
+                </strong>
+            </p>
+
+        </section>
+
     </div>
+
+
+    <!-- =========================================
+         CHART.JS
+         ========================================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <!-- =========================================
+         PRADHAN16 AI JAVASCRIPT
+         ========================================= -->
 
     <script src="script.js"></script>
 
+</body>
+
 </html>
-<!-- =========================================
-     DAY 21 — P/L PERFORMANCE CHART
-     ========================================= -->
-
-<section id="performanceChart">
-
-    <h2>P/L Performance</h2>
-
-    <canvas id="plChart" width="400" height="250"></canvas>
-
-</section>
-<!-- =========================================
-     Day 23: Equity Curve / P&L Chart
-     ========================================= -->
-
-<div id="equityChartSection" class="dashboard-card">
-
-    <h2>📈 Equity Curve</h2>
-
-    <p>
-        Cumulative P&L from your saved trades
-    </p>
-
-    <canvas id="equityChart"></canvas>
-
-</div>
-<!-- =========================================
-     Day 24 — Drawdown Analysis
-     ========================================= -->
-
-<div class="dashboard-card">
-
-    <h2>📉 Drawdown Analysis</h2>
-
-    <p>
-        Current Drawdown:
-        <strong id="currentDrawdown">₹0.00</strong>
-    </p>
-
-    <p>
-        Maximum Drawdown:
-        <strong id="maxDrawdown">₹0.00</strong>
-    </p>
-
-    <p>
-        Peak P&L:
-        <strong id="peakPL">₹0.00</strong>
-    </p>
-
-    <p>
-        Current P&L:
-        <strong id="currentPL">₹0.00</strong>
-    </p>
-
-</div>
