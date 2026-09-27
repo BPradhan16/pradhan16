@@ -226,6 +226,63 @@
 
     <!--
 <!-- =========================================
+     DAY 26 — RISK / REWARD CALCULATOR
+     ========================================= -->
+
+<section class="dashboard-card">
+
+    <h2>⚖️ Risk / Reward Calculator</h2>
+
+    <input
+        type="number"
+        id="rrEntry"
+        placeholder="Entry Price"
+    >
+
+    <input
+        type="number"
+        id="rrStopLoss"
+        placeholder="Stop Loss"
+    >
+
+    <input
+        type="number"
+        id="rrTarget"
+        placeholder="Target"
+    >
+
+    <input
+        type="number"
+        id="rrQuantity"
+        placeholder="Quantity"
+    >
+
+    <button onclick="calculateRiskReward()">
+        Calculate R:R
+    </button>
+
+    <p>
+        Risk Amount:
+        ₹<span id="riskAmount">0.00</span>
+    </p>
+
+    <p>
+        Reward Amount:
+        ₹<span id="rewardAmount">0.00</span>
+    </p>
+
+    <p>
+        Risk / Reward:
+        <span id="riskRewardRatio">0.00</span>
+    </p>
+
+    <p>
+        Status:
+        <span id="rrStatus">Waiting...</span>
+    </p>
+
+</section>
+<!-- =========================================
      DAY 25 — RISK METRICS
      ========================================= -->
 
