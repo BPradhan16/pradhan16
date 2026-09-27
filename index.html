@@ -283,6 +283,58 @@
 
 </section>
 <!-- =========================================
+     DAY 27 — POSITION SIZE CALCULATOR
+     ========================================= -->
+
+<section class="dashboard-card">
+
+    <h2>📐 Position Size Calculator</h2>
+
+    <input
+        type="number"
+        id="capital"
+        placeholder="Total Capital"
+    >
+
+    <input
+        type="number"
+        id="riskPercent"
+        placeholder="Risk % per Trade"
+    >
+
+    <input
+        type="number"
+        id="entryPrice"
+        placeholder="Entry Price"
+    >
+
+    <input
+        type="number"
+        id="stopLossPrice"
+        placeholder="Stop Loss Price"
+    >
+
+    <button onclick="calculatePositionSize()">
+        Calculate Position Size
+    </button>
+
+    <p>
+        Risk Amount:
+        ₹<span id="positionRisk">0.00</span>
+    </p>
+
+    <p>
+        Risk Per Unit:
+        ₹<span id="riskPerUnit">0.00</span>
+    </p>
+
+    <p>
+        Suggested Quantity:
+        <span id="positionQuantity">0</span>
+    </p>
+
+</section>
+<!-- =========================================
      DAY 25 — RISK METRICS
      ========================================= -->
 
