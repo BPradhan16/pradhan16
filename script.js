@@ -554,6 +554,65 @@ function calculateRiskReward() {
     document.getElementById("rrStatus").innerText =
         "Calculated ✅";
 }
+/* =========================================
+   DAY 27 — POSITION SIZE CALCULATOR
+   ========================================= */
+
+function calculatePositionSize() {
+
+    const capital =
+        Number(document.getElementById("capital").value) || 0;
+
+    const riskPercent =
+        Number(document.getElementById("riskPercent").value) || 0;
+
+    const entryPrice =
+        Number(document.getElementById("entryPrice").value) || 0;
+
+    const stopLossPrice =
+        Number(document.getElementById("stopLossPrice").value) || 0;
+
+
+    if (
+        capital <= 0 ||
+        riskPercent <= 0 ||
+        entryPrice <= 0 ||
+        stopLossPrice <= 0
+    ) {
+
+        document.getElementById("positionQuantity").innerText =
+            "Enter all values";
+
+        return;
+    }
+
+
+    // Maximum money allowed to risk
+    const riskAmount =
+        capital * (riskPercent / 100);
+
+
+    // Risk on one unit
+    const riskPerUnit =
+        Math.abs(entryPrice - stopLossPrice);
+
+
+    // Position quantity
+    const quantity =
+        riskPerUnit > 0
+            ? Math.floor(riskAmount / riskPerUnit)
+            : 0;
+
+
+    document.getElementById("positionRisk").innerText =
+        riskAmount.toFixed(2);
+
+    document.getElementById("riskPerUnit").innerText =
+        riskPerUnit.toFixed(2);
+
+    document.getElementById("positionQuantity").innerText =
+        quantity;
+}
         
 /* =========================================
    REFRESH EVERYTHING
