@@ -579,7 +579,10 @@ function refreshDashboard() {
 
     calculateDrawdown();
 
+    calculateRiskMetrics();
+
 }
+
 
 
 /* =========================================
