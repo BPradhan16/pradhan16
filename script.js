@@ -567,3 +567,96 @@ function createPLChart() {
 
 /* Run chart when app loads */
 createPLChart();
+/* =========================================
+   Day 23 — Equity Curve
+   ========================================= */
+
+let equityChart;
+
+function updateEquityChart() {
+
+    const trades = JSON.parse(
+        localStorage.getItem("pradhan16_trades") || "[]"
+    );
+
+    let cumulativePL = 0;
+
+    const labels = [];
+    const equityData = [];
+
+    trades.forEach((trade, index) => {
+
+        const pl = Number(
+            trade.pl ??
+            trade.pnl ??
+            trade.profitLoss ??
+            0
+        );
+
+        cumulativePL += pl;
+
+        labels.push("Trade " + (index + 1));
+        equityData.push(cumulativePL);
+    });
+
+    const canvas = document.getElementById("equityChart");
+
+    if (!canvas) return;
+
+    if (equityChart) {
+        equityChart.destroy();
+    }
+
+    equityChart = new Chart(canvas, {
+
+        type: "line",
+
+        data: {
+            labels: labels,
+
+            datasets: [{
+                label: "Cumulative P&L",
+
+                data: equityData,
+
+                tension: 0.3,
+
+                fill: false,
+
+                borderWidth: 2,
+
+                pointRadius: 4
+            }]
+        },
+
+        options: {
+
+            responsive: true,
+
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+
+            scales: {
+
+                y: {
+                    beginAtZero: false,
+
+                    title: {
+                        display: true,
+                        text: "P&L (₹)"
+                    }
+                },
+
+                x: {
+                    title: {
+                        display: true,
+                        text: "Trades"
+                    }
+                }
+            }
+        }
+    });
+}
