@@ -612,6 +612,52 @@ function calculatePositionSize() {
     document.getElementById("positionQuantity").innerText =
         quantity;
 }
+/* =========================================
+   DAY 28 — RISK DASHBOARD
+   ========================================= */
+
+function updateRiskDashboard() {
+
+    const capital =
+        Number(document.getElementById("capital").value) || 0;
+
+    const riskPercent =
+        Number(document.getElementById("riskPercent").value) || 0;
+
+    const entryPrice =
+        Number(document.getElementById("entryPrice").value) || 0;
+
+    const stopLossPrice =
+        Number(document.getElementById("stopLossPrice").value) || 0;
+
+
+    const riskAmount =
+        capital * (riskPercent / 100);
+
+    const riskPerUnit =
+        Math.abs(entryPrice - stopLossPrice);
+
+    const positionSize =
+        riskPerUnit > 0
+            ? Math.floor(riskAmount / riskPerUnit)
+            : 0;
+
+
+    document.getElementById("dashboardCapital").innerText =
+        capital.toFixed(2);
+
+    document.getElementById("dashboardRiskPercent").innerText =
+        riskPercent.toFixed(2) + "%";
+
+    document.getElementById("dashboardRiskAmount").innerText =
+        riskAmount.toFixed(2);
+
+    document.getElementById("dashboardRiskPerUnit").innerText =
+        riskPerUnit.toFixed(2);
+
+    document.getElementById("dashboardPositionSize").innerText =
+        positionSize;
+}
         
 /* =========================================
    REFRESH EVERYTHING
