@@ -663,3 +663,116 @@ function updateEquityChart() {
         }
     });
 }
+/* =========================================
+   Pradhan16 AI — Day 24
+   Drawdown Analysis
+   ========================================= */
+
+function calculateDrawdown() {
+
+    const trades = JSON.parse(
+        localStorage.getItem("pradhan16_trades") || "[]"
+    );
+
+    let cumulativePL = 0;
+    let peakPL = 0;
+
+    let currentDrawdown = 0;
+    let maxDrawdown = 0;
+    let maxDrawdownPeak = 0;
+    let maxDrawdownBottom = 0;
+
+    trades.forEach(trade => {
+
+        const pl = Number(trade.profitLoss) || 0;
+
+        cumulativePL += pl;
+
+        // New peak
+        if (cumulativePL > peakPL) {
+            peakPL = cumulativePL;
+        }
+
+        // Current drawdown
+        currentDrawdown = peakPL - cumulativePL;
+
+        // Maximum drawdown
+        if (currentDrawdown > maxDrawdown) {
+
+            maxDrawdown = currentDrawdown;
+
+            maxDrawdownPeak = peakPL;
+
+            maxDrawdownBottom = cumulativePL;
+        }
+    });
+
+
+    /* =========================================
+       Display Results
+       ========================================= */
+
+    const currentDrawdownElement =
+        document.getElementById("currentDrawdown");
+
+    if (currentDrawdownElement) {
+
+        currentDrawdownElement.textContent =
+            "₹" + currentDrawdown.toFixed(2);
+    }
+
+
+    const maxDrawdownElement =
+        document.getElementById("maxDrawdown");
+
+    if (maxDrawdownElement) {
+
+        maxDrawdownElement.textContent =
+            "₹" + maxDrawdown.toFixed(2);
+    }
+
+
+    const peakPLElement =
+        document.getElementById("peakPL");
+
+    if (peakPLElement) {
+
+        peakPLElement.textContent =
+            "₹" + peakPL.toFixed(2);
+    }
+
+
+    const currentPLElement =
+        document.getElementById("currentPL");
+
+    if (currentPLElement) {
+
+        currentPLElement.textContent =
+            "₹" + cumulativePL.toFixed(2);
+    }
+
+
+    // Return values for future features
+    return {
+
+        currentPL: cumulativePL,
+
+        peakPL: peakPL,
+
+        currentDrawdown: currentDrawdown,
+
+        maxDrawdown: maxDrawdown,
+
+        maxDrawdownPeak: maxDrawdownPeak,
+
+        maxDrawdownBottom: maxDrawdownBottom
+
+    };
+}
+
+
+/* =========================================
+   Run Drawdown Analysis
+   ========================================= */
+
+calculateDrawdown();
