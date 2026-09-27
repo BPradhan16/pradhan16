@@ -1,24 +1,24 @@
 /* =========================================
    Pradhan16 AI — Trading Journal
-   Day 20: Statistics
-   Day 21: P/L Performance Chart
-   Day 23: Equity Curve
-   Day 24: Drawdown Analysis
+   Day 20 — Statistics
+   Day 21 — P/L Chart
+   Day 23 — Equity Curve
+   Day 24 — Drawdown
    ========================================= */
 
 
-/* =========================================
-   OPEN TRADING JOURNAL
-   ========================================= */
+/* ---------- OPEN JOURNAL ---------- */
 
 function openJournal() {
-    document.getElementById("journal").style.display = "block";
+    const journal = document.getElementById("journal");
+
+    if (journal) {
+        journal.style.display = "block";
+    }
 }
 
 
-/* =========================================
-   CALCULATE PROFIT / LOSS
-   ========================================= */
+/* ---------- CALCULATE P/L ---------- */
 
 function calculatePL() {
 
@@ -39,24 +39,14 @@ function calculatePL() {
 }
 
 
-/* =========================================
-   SAVE TRADE
-   ========================================= */
+/* ---------- SAVE TRADE ---------- */
 
 function saveTrade() {
 
-    const symbol =
-        document.getElementById("symbol").value.trim();
-
-    const entry =
-        Number(document.getElementById("entry").value);
-
-    const exit =
-        Number(document.getElementById("exit").value);
-
-    const quantity =
-        Number(document.getElementById("quantity").value);
-
+    const symbol = document.getElementById("symbol").value.trim();
+    const entry = Number(document.getElementById("entry").value);
+    const exit = Number(document.getElementById("exit").value);
+    const quantity = Number(document.getElementById("quantity").value);
 
     if (!symbol || !entry || !exit || !quantity) {
 
@@ -66,161 +56,78 @@ function saveTrade() {
         return;
     }
 
-
-    const profitLoss =
-        (exit - entry) * quantity;
-
+    const profitLoss = (exit - entry) * quantity;
 
     const trade = {
-
         symbol: symbol,
         entry: entry,
         exit: exit,
         quantity: quantity,
         profitLoss: profitLoss,
         date: new Date().toLocaleString()
-
     };
-
 
     let trades = JSON.parse(
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
-
     trades.push(trade);
-
 
     localStorage.setItem(
         "pradhan16_trades",
         JSON.stringify(trades)
     );
 
-
     document.getElementById("tradeMessage").innerText =
         "✅ Trade saved successfully!";
 
-
-    // Update everything
-    calculateStatistics();
-    createPLChart();
-    updateEquityChart();
-    calculateDrawdown();
+    refreshDashboard();
 }
 
 
-/* =========================================
-   OPEN TRADE REVIEW
-   ========================================= */
+/* ---------- REVIEW ---------- */
 
 function openReview() {
 
-    const review =
-        document.getElementById("review");
-
-    const reviewMessage =
-        document.getElementById("reviewMessage");
-
+    const review = document.getElementById("review");
+    const reviewMessage = document.getElementById("reviewMessage");
 
     const trades = JSON.parse(
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
-
     review.style.display = "block";
 
-
     if (trades.length === 0) {
-
-        reviewMessage.innerText =
-            "No saved trades found.";
-
+        reviewMessage.innerText = "No saved trades found.";
         return;
     }
 
-
     let html = "<h3>Trade History</h3>";
-
 
     trades.forEach((trade, index) => {
 
         html += `
             <div>
-
                 <strong>Trade ${index + 1}</strong><br>
-
                 Symbol: ${trade.symbol}<br>
-
                 Entry: ₹${trade.entry}<br>
-
                 Exit: ₹${trade.exit}<br>
-
                 Quantity: ${trade.quantity}<br>
-
                 P/L: ₹${Number(trade.profitLoss).toFixed(2)}<br>
-
                 Date: ${trade.date}
-
                 <hr>
-
             </div>
         `;
 
     });
-
 
     reviewMessage.innerHTML = html;
 }
 
 
 /* =========================================
-   DAY 19 — BASIC TRADE STATISTICS
-   ========================================= */
-
-function getTradeStats() {
-
-    const trades = JSON.parse(
-        localStorage.getItem("pradhan16_trades") || "[]"
-    );
-
-
-    let totalPL = 0;
-    let wins = 0;
-    let losses = 0;
-
-
-    trades.forEach(trade => {
-
-        const pl =
-            Number(trade.profitLoss) || 0;
-
-        totalPL += pl;
-
-
-        if (pl > 0) {
-            wins++;
-        }
-
-        else if (pl < 0) {
-            losses++;
-        }
-
-    });
-
-
-    return {
-
-        totalTrades: trades.length,
-        totalPL: totalPL,
-        wins: wins,
-        losses: losses
-
-    };
-}
-
-
-/* =========================================
-   DAY 20 — TRADING STATISTICS
+   DAY 20 — STATISTICS
    ========================================= */
 
 function calculateStatistics() {
@@ -229,9 +136,7 @@ function calculateStatistics() {
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
-
     const totalTrades = trades.length;
-
 
     let winningTrades = 0;
     let losingTrades = 0;
@@ -239,201 +144,119 @@ function calculateStatistics() {
     let grossProfit = 0;
     let grossLoss = 0;
 
-
     trades.forEach(trade => {
 
-        const pl =
-            Number(trade.profitLoss) || 0;
-
+        const pl = Number(trade.profitLoss) || 0;
 
         if (pl > 0) {
-
             winningTrades++;
-
             grossProfit += pl;
-
         }
 
-
         if (pl < 0) {
-
             losingTrades++;
-
             grossLoss += Math.abs(pl);
-
         }
 
     });
 
-
     const winRate =
-
         totalTrades > 0
             ? (winningTrades / totalTrades) * 100
             : 0;
 
-
     const averageProfit =
-
         winningTrades > 0
             ? grossProfit / winningTrades
             : 0;
 
-
     const averageLoss =
-
         losingTrades > 0
             ? grossLoss / losingTrades
             : 0;
 
-
     const profitFactor =
-
         grossLoss > 0
             ? grossProfit / grossLoss
             : 0;
 
-
     const lossRate =
-
         totalTrades > 0
             ? losingTrades / totalTrades
             : 0;
 
-
     const expectancy =
-
         (winRate / 100 * averageProfit)
         -
         (lossRate * averageLoss);
 
 
-    /* -----------------------------------------
-       DISPLAY
-       ----------------------------------------- */
+    /* DISPLAY */
 
-    const totalTradesElement =
-        document.getElementById("totalTrades");
+    setText("totalTrades", totalTrades);
+    setText("winningTrades", winningTrades);
+    setText("losingTrades", losingTrades);
 
-    if (totalTradesElement)
-        totalTradesElement.textContent = totalTrades;
+    setText("winRate", winRate.toFixed(2) + "%");
 
+    setText("grossProfit", grossProfit.toFixed(2));
+    setText("grossLoss", grossLoss.toFixed(2));
 
-    const winningTradesElement =
-        document.getElementById("winningTrades");
+    setText("averageProfit", averageProfit.toFixed(2));
+    setText("averageLoss", averageLoss.toFixed(2));
 
-    if (winningTradesElement)
-        winningTradesElement.textContent = winningTrades;
-
-
-    const losingTradesElement =
-        document.getElementById("losingTrades");
-
-    if (losingTradesElement)
-        losingTradesElement.textContent = losingTrades;
+    setText("profitFactor", profitFactor.toFixed(2));
+    setText("expectancy", expectancy.toFixed(2));
+}
 
 
-    const winRateElement =
-        document.getElementById("winRate");
+/* ---------- HELPER ---------- */
 
-    if (winRateElement)
-        winRateElement.textContent =
-            winRate.toFixed(2) + "%";
+function setText(id, value) {
 
+    const element = document.getElementById(id);
 
-    const grossProfitElement =
-        document.getElementById("grossProfit");
+    if (element) {
+        element.textContent = value;
+    }
 
-    if (grossProfitElement)
-        grossProfitElement.textContent =
-            grossProfit.toFixed(2);
-
-
-    const grossLossElement =
-        document.getElementById("grossLoss");
-
-    if (grossLossElement)
-        grossLossElement.textContent =
-            grossLoss.toFixed(2);
-
-
-    const averageProfitElement =
-        document.getElementById("averageProfit");
-
-    if (averageProfitElement)
-        averageProfitElement.textContent =
-            averageProfit.toFixed(2);
-
-
-    const averageLossElement =
-        document.getElementById("averageLoss");
-
-    if (averageLossElement)
-        averageLossElement.textContent =
-            averageLoss.toFixed(2);
-
-
-    const profitFactorElement =
-        document.getElementById("profitFactor");
-
-    if (profitFactorElement)
-        profitFactorElement.textContent =
-            profitFactor.toFixed(2);
-
-
-    const expectancyElement =
-        document.getElementById("expectancy");
-
-    if (expectancyElement)
-        expectancyElement.textContent =
-            expectancy.toFixed(2);
 }
 
 
 /* =========================================
-   DAY 21 — P/L PERFORMANCE CHART
+   DAY 21 — P/L PERFORMANCE
    ========================================= */
 
 let plChart = null;
 
-
 function createPLChart() {
 
-    const canvas =
-        document.getElementById("plChart");
-
+    const canvas = document.getElementById("plChart");
 
     if (!canvas) {
         return;
     }
 
+    if (typeof Chart === "undefined") {
+        console.log("Chart.js not available.");
+        return;
+    }
 
     const trades = JSON.parse(
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
-
-    const labels = trades.map((trade, index) =>
-        "Trade " + (index + 1)
+    const labels = trades.map(
+        (trade, index) => "Trade " + (index + 1)
     );
 
-
-    const profitLoss = trades.map(trade =>
-        Number(trade.profitLoss) || 0
+    const data = trades.map(
+        trade => Number(trade.profitLoss) || 0
     );
-
 
     if (plChart) {
         plChart.destroy();
     }
-
-
-    // Check Chart.js
-    if (typeof Chart === "undefined") {
-        console.error("Chart.js not loaded.");
-        return;
-    }
-
 
     plChart = new Chart(canvas, {
 
@@ -447,7 +270,7 @@ function createPLChart() {
 
                 label: "Profit / Loss",
 
-                data: profitLoss
+                data: data
 
             }]
 
@@ -477,59 +300,41 @@ function createPLChart() {
 
 let equityChart = null;
 
-
 function updateEquityChart() {
 
-    const canvas =
-        document.getElementById("equityChart");
-
+    const canvas = document.getElementById("equityChart");
 
     if (!canvas) {
         return;
     }
 
+    if (typeof Chart === "undefined") {
+        return;
+    }
 
     const trades = JSON.parse(
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
-
     let cumulativePL = 0;
 
-
     const labels = [];
-    const equityData = [];
-
+    const data = [];
 
     trades.forEach((trade, index) => {
 
-        const pl =
-            Number(trade.profitLoss) || 0;
-
+        const pl = Number(trade.profitLoss) || 0;
 
         cumulativePL += pl;
 
-
-        labels.push(
-            "Trade " + (index + 1)
-        );
-
-
-        equityData.push(cumulativePL);
+        labels.push("Trade " + (index + 1));
+        data.push(cumulativePL);
 
     });
-
 
     if (equityChart) {
         equityChart.destroy();
     }
-
-
-    if (typeof Chart === "undefined") {
-        console.error("Chart.js not loaded.");
-        return;
-    }
-
 
     equityChart = new Chart(canvas, {
 
@@ -543,15 +348,13 @@ function updateEquityChart() {
 
                 label: "Cumulative P&L",
 
-                data: equityData,
+                data: data,
 
                 tension: 0.3,
 
                 fill: false,
 
-                borderWidth: 2,
-
-                pointRadius: 4
+                borderWidth: 2
 
             }]
 
@@ -564,27 +367,7 @@ function updateEquityChart() {
             scales: {
 
                 y: {
-
-                    title: {
-
-                        display: true,
-
-                        text: "P&L (₹)"
-
-                    }
-
-                },
-
-                x: {
-
-                    title: {
-
-                        display: true,
-
-                        text: "Trades"
-
-                    }
-
+                    beginAtZero: false
                 }
 
             }
@@ -596,7 +379,7 @@ function updateEquityChart() {
 
 
 /* =========================================
-   DAY 24 — DRAWDOWN ANALYSIS
+   DAY 24 — DRAWDOWN
    ========================================= */
 
 function calculateDrawdown() {
@@ -605,112 +388,66 @@ function calculateDrawdown() {
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
-
     let cumulativePL = 0;
     let peakPL = 0;
 
     let currentDrawdown = 0;
     let maxDrawdown = 0;
 
-    let maxDrawdownPeak = 0;
-    let maxDrawdownBottom = 0;
-
-
     trades.forEach(trade => {
 
-        const pl =
-            Number(trade.profitLoss) || 0;
-
+        const pl = Number(trade.profitLoss) || 0;
 
         cumulativePL += pl;
 
-
         if (cumulativePL > peakPL) {
-
             peakPL = cumulativePL;
-
         }
-
 
         currentDrawdown =
             peakPL - cumulativePL;
 
-
         if (currentDrawdown > maxDrawdown) {
-
-            maxDrawdown =
-                currentDrawdown;
-
-            maxDrawdownPeak =
-                peakPL;
-
-            maxDrawdownBottom =
-                cumulativePL;
-
+            maxDrawdown = currentDrawdown;
         }
 
     });
 
+    setText(
+        "currentDrawdown",
+        "₹" + currentDrawdown.toFixed(2)
+    );
 
-    const currentDrawdownElement =
-        document.getElementById("currentDrawdown");
+    setText(
+        "maxDrawdown",
+        "₹" + maxDrawdown.toFixed(2)
+    );
 
-    if (currentDrawdownElement) {
+    setText(
+        "peakPL",
+        "₹" + peakPL.toFixed(2)
+    );
 
-        currentDrawdownElement.textContent =
-            "₹" + currentDrawdown.toFixed(2);
-
-    }
-
-
-    const maxDrawdownElement =
-        document.getElementById("maxDrawdown");
-
-    if (maxDrawdownElement) {
-
-        maxDrawdownElement.textContent =
-            "₹" + maxDrawdown.toFixed(2);
-
-    }
-
-
-    const peakPLElement =
-        document.getElementById("peakPL");
-
-    if (peakPLElement) {
-
-        peakPLElement.textContent =
-            "₹" + peakPL.toFixed(2);
-
-    }
+    setText(
+        "currentPL",
+        "₹" + cumulativePL.toFixed(2)
+    );
+}
 
 
-    const currentPLElement =
-        document.getElementById("currentPL");
+/* =========================================
+   REFRESH EVERYTHING
+   ========================================= */
 
-    if (currentPLElement) {
+function refreshDashboard() {
 
-        currentPLElement.textContent =
-            "₹" + cumulativePL.toFixed(2);
+    calculateStatistics();
 
-    }
+    createPLChart();
 
+    updateEquityChart();
 
-    return {
-
-        currentPL: cumulativePL,
-
-        peakPL: peakPL,
-
-        currentDrawdown: currentDrawdown,
-
-        maxDrawdown: maxDrawdown,
-
-        maxDrawdownPeak: maxDrawdownPeak,
-
-        maxDrawdownBottom: maxDrawdownBottom
-
-    };
+    calculateDrawdown();
 
 }
 
@@ -721,12 +458,6 @@ function calculateDrawdown() {
 
 window.addEventListener("load", function () {
 
-    calculateStatistics();
-
-    createPLChart();
-
-    updateEquityChart();
-
-    calculateDrawdown();
+    refreshDashboard();
 
 });
