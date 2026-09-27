@@ -497,6 +497,8 @@ function calculateStatistics() {
    ========================================= */
 
 calculateStatistics();
+calculateStatistics();
+createPLChart();
 updateEquityChart();
 /* =========================================
    Pradhan16 AI — Day 21
