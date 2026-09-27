@@ -500,6 +500,7 @@ calculateStatistics();
 calculateStatistics();
 createPLChart();
 updateEquityChart();
+calculateDrawdown();
 /* =========================================
    Pradhan16 AI — Day 21
    P/L Performance Chart
