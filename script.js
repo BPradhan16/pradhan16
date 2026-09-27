@@ -8,57 +8,41 @@ function calculateRiskMetrics() {
         localStorage.getItem("pradhan16_trades") || "[]"
     );
 
-    if (trades.length === 0) {
+    console.log("Risk Metrics Trades:", trades);
 
+    if (trades.length === 0) {
         setText("averageRisk", "0.00");
         setText("maximumRisk", "0.00");
         setText("averageReward", "0.00");
         setText("averageRR", "0.00");
         setText("riskConsistency", "0%");
-
         return;
     }
 
     let totalRisk = 0;
-    let totalReward = 0;
     let maximumRisk = 0;
-    let rrTotal = 0;
-    let rrCount = 0;
+    let totalReward = 0;
 
     trades.forEach(trade => {
 
         const entry = Number(trade.entry) || 0;
         const exit = Number(trade.exit) || 0;
         const quantity = Number(trade.quantity) || 0;
-
-        const difference = Math.abs(exit - entry);
-
-        const tradeValue = difference * quantity;
-
-        if (tradeValue > maximumRisk) {
-            maximumRisk = tradeValue;
-        }
-
-        totalRisk += tradeValue;
-
         const pl = Number(trade.profitLoss) || 0;
 
-        if (pl > 0) {
+        const risk =
+            Math.abs(exit - entry) * quantity;
 
-            totalReward += pl;
+        totalRisk += risk;
 
-            if (tradeValue > 0) {
-
-                const rr = pl / tradeValue;
-
-                rrTotal += rr;
-                rrCount++;
-
-            }
+        if (risk > maximumRisk) {
+            maximumRisk = risk;
         }
 
+        if (pl > 0) {
+            totalReward += pl;
+        }
     });
-
 
     const averageRisk =
         totalRisk / trades.length;
@@ -67,41 +51,9 @@ function calculateRiskMetrics() {
         totalReward / trades.length;
 
     const averageRR =
-        rrCount > 0
-            ? rrTotal / rrCount
+        averageRisk > 0
+            ? averageReward / averageRisk
             : 0;
-
-
-    /*
-       Risk consistency:
-       percentage of trades whose
-       risk is within 20% of average risk
-    */
-
-    let consistentTrades = 0;
-
-    trades.forEach(trade => {
-
-        const entry = Number(trade.entry) || 0;
-        const exit = Number(trade.exit) || 0;
-        const quantity = Number(trade.quantity) || 0;
-
-        const risk =
-            Math.abs(exit - entry) * quantity;
-
-        if (
-            risk >= averageRisk * 0.8 &&
-            risk <= averageRisk * 1.2
-        ) {
-            consistentTrades++;
-        }
-
-    });
-
-
-    const riskConsistency =
-        (consistentTrades / trades.length) * 100;
-
 
     setText(
         "averageRisk",
@@ -125,9 +77,10 @@ function calculateRiskMetrics() {
 
     setText(
         "riskConsistency",
-        riskConsistency.toFixed(2) + "%"
+        "Calculated"
     );
 }
+
 /* =========================================
    Pradhan16 AI — Trading Journal
    Day 20 — Statistics
