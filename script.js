@@ -777,3 +777,13 @@ function calculateDrawdown() {
    ========================================= */
 
 calculateDrawdown();
+// =========================================
+// FINAL APP UPDATE
+// =========================================
+
+window.addEventListener("load", function () {
+    calculateStatistics();
+    createPLChart();
+    updateEquityChart();
+    calculateDrawdown();
+});
