@@ -516,6 +516,85 @@ function calculateDrawdown() {
         "₹" + cumulativePL.toFixed(2)
     );
 }
+/* =========================================
+   DAY 26 — RISK / REWARD CALCULATOR
+   ========================================= */
+
+function calculateRiskReward() {
+
+    const entry =
+        Number(document.getElementById("rrEntry").value) || 0;
+
+    const stopLoss =
+        Number(document.getElementById("rrStopLoss").value) || 0;
+
+    const target =
+        Number(document.getElementById("rrTarget").value) || 0;
+
+    const quantity =
+        Number(document.getElementById("rrQuantity").value) || 0;
+
+
+    if (
+        entry <= 0 ||
+        stopLoss <= 0 ||
+        target <= 0 ||
+        quantity <= 0
+    ) {
+
+        document.getElementById("rrStatus").innerText =
+            "Enter all values";
+
+        return;
+    }
+
+
+    const riskPerUnit =
+        Math.abs(entry - stopLoss);
+
+    const rewardPerUnit =
+        Math.abs(target - entry);
+
+
+    const riskAmount =
+        riskPerUnit * quantity;
+
+    const rewardAmount =
+        rewardPerUnit * quantity;
+
+
+    const ratio =
+        riskAmount > 0
+            ? rewardAmount / riskAmount
+            : 0;
+
+
+    document.getElementById("riskAmount").innerText =
+        riskAmount.toFixed(2);
+
+    document.getElementById("rewardAmount").innerText =
+        rewardAmount.toFixed(2);
+
+    document.getElementById("riskRewardRatio").innerText =
+        "1 : " + ratio.toFixed(2);
+
+
+    if (ratio >= 2) {
+
+        document.getElementById("rrStatus").innerText =
+            "Good Risk/Reward";
+
+    } else if (ratio >= 1) {
+
+        document.getElementById("rrStatus").innerText =
+            "Moderate Risk/Reward";
+
+    } else {
+
+        document.getElementById("rrStatus").innerText =
+            "High Risk";
+    }
+}
 
 
 /* =========================================
