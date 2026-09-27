@@ -560,18 +560,29 @@ function calculateRiskReward() {
 
 function calculatePositionSize() {
 
-    const capital =
-        Number(document.getElementById("capital").value) || 0;
+    const capital = Number(
+        document.getElementById("capital").value
+    );
 
-    const riskPercent =
-        Number(document.getElementById("riskPercent").value) || 0;
+    const riskPercent = Number(
+        document.getElementById("riskPercent").value
+    );
 
-    const entryPrice =
-        Number(document.getElementById("entryPrice").value) || 0;
+    const entryPrice = Number(
+        document.getElementById("entryPrice").value
+    );
 
-    const stopLossPrice =
-        Number(document.getElementById("stopLossPrice").value) || 0;
+    const stopLossPrice = Number(
+        document.getElementById("stopLossPrice").value
+    );
 
+    console.log(
+        "Day 27:",
+        capital,
+        riskPercent,
+        entryPrice,
+        stopLossPrice
+    );
 
     if (
         capital <= 0 ||
@@ -579,30 +590,18 @@ function calculatePositionSize() {
         entryPrice <= 0 ||
         stopLossPrice <= 0
     ) {
-
-        document.getElementById("positionQuantity").innerText =
-            "Enter all values";
-
+        alert("Please enter all values");
         return;
     }
 
-
-    // Maximum money allowed to risk
     const riskAmount =
-        capital * (riskPercent / 100);
+        capital * riskPercent / 100;
 
-
-    // Risk on one unit
     const riskPerUnit =
         Math.abs(entryPrice - stopLossPrice);
 
-
-    // Position quantity
     const quantity =
-        riskPerUnit > 0
-            ? Math.floor(riskAmount / riskPerUnit)
-            : 0;
-
+        Math.floor(riskAmount / riskPerUnit);
 
     document.getElementById("positionRisk").innerText =
         riskAmount.toFixed(2);
