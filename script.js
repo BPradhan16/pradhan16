@@ -1642,24 +1642,17 @@ function calculateRiskHistoryAnalytics() {
    ========================================================= */
 
 function refreshDashboard() {
-
     calculateStatistics();
-
     createPLChart();
-
     updateEquityChart();
-
     calculateDrawdown();
-
     calculateRiskMetrics();
-
     updateRiskDashboard();
-
     displayRiskHistory();
-}
 
-
-/* =========================================================
+    // Day 30
+    calculateRiskHistoryAnalytics();
+} =========================================================
    LOAD APP
    ========================================================= */
 
