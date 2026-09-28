@@ -1,3 +1,4 @@
+alert("Pradhan16 JavaScript Loaded!");
 /* =========================================================
    PRADHAN16 AI — TRADING JOURNAL
    DAY 17 → DAY 29
