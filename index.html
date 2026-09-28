@@ -341,16 +341,16 @@
 function updateRiskDashboard() {
 
     const capital =
-        Number(document.getElementById("capital")?.value) || 0;
+        Number(document.getElementById("capital").value) || 0;
 
     const riskPercent =
-        Number(document.getElementById("riskPercent")?.value) || 0;
+        Number(document.getElementById("riskPercent").value) || 0;
 
     const entryPrice =
-        Number(document.getElementById("entryPrice")?.value) || 0;
+        Number(document.getElementById("entryPrice").value) || 0;
 
     const stopLossPrice =
-        Number(document.getElementById("stopLossPrice")?.value) || 0;
+        Number(document.getElementById("stopLossPrice").value) || 0;
 
     const riskAmount =
         capital * riskPercent / 100;
@@ -363,58 +363,11 @@ function updateRiskDashboard() {
             ? Math.floor(riskAmount / riskPerUnit)
             : 0;
 
-    setText(
-        "dashboardCapital",
-        capital.toFixed(2)
-    );
-
-    setText(
-        "dashboardRiskPercent",
-        riskPercent.toFixed(2) + "%"
-    );
-
-    setText(
-        "dashboardRiskAmount",
-        riskAmount.toFixed(2)
-    );
-
-    setText(
-        "dashboardRiskPerUnit",
-        riskPerUnit.toFixed(2)
-    );
-
-    setText(
-        "dashboardPositionSize",
-        positionSize
-    );
-
-    // Risk/Reward
-    const targetPrice =
-        Number(document.getElementById("targetPrice")?.value) || 0;
-
-    let rr = 0;
-
-    if (
-        entryPrice > 0 &&
-        stopLossPrice > 0 &&
-        targetPrice > 0
-    ) {
-
-        const risk =
-            Math.abs(entryPrice - stopLossPrice);
-
-        const reward =
-            Math.abs(targetPrice - entryPrice);
-
-        if (risk > 0) {
-            rr = reward / risk;
-        }
-    }
-
-    setText(
-        "dashboardRR",
-        rr.toFixed(2)
-    );
+    setText("dashboardCapital", capital.toFixed(2));
+    setText("dashboardRiskPercent", riskPercent.toFixed(2) + "%");
+    setText("dashboardRiskAmount", riskAmount.toFixed(2));
+    setText("dashboardRiskPerUnit", riskPerUnit.toFixed(2));
+    setText("dashboardPositionSize", positionSize);
 }
 <!-- =========================================
      DAY 25 — RISK METRICS
