@@ -1066,3 +1066,180 @@ window.addEventListener(
 
     }
 );
+/* =========================================================
+   DAY 29 — TRADE RISK HISTORY
+   ========================================================= */
+
+function saveRiskHistory() {
+
+    const capital =
+        Number(document.getElementById("capital")?.value) || 0;
+
+    const riskPercent =
+        Number(document.getElementById("riskPercent")?.value) || 0;
+
+    const entryPrice =
+        Number(document.getElementById("entryPrice")?.value) || 0;
+
+    const stopLossPrice =
+        Number(document.getElementById("stopLossPrice")?.value) || 0;
+
+    if (
+        capital <= 0 ||
+        riskPercent <= 0 ||
+        entryPrice <= 0 ||
+        stopLossPrice <= 0
+    ) {
+        return;
+    }
+
+    const riskAmount =
+        capital * (riskPercent / 100);
+
+    const riskPerUnit =
+        Math.abs(entryPrice - stopLossPrice);
+
+    if (riskPerUnit <= 0) {
+        return;
+    }
+
+    const quantity =
+        Math.floor(riskAmount / riskPerUnit);
+
+    const riskTrade = {
+
+        capital: capital,
+
+        riskPercent: riskPercent,
+
+        entryPrice: entryPrice,
+
+        stopLossPrice: stopLossPrice,
+
+        riskAmount: riskAmount,
+
+        riskPerUnit: riskPerUnit,
+
+        quantity: quantity,
+
+        date: new Date().toLocaleString()
+
+    };
+
+
+    let history =
+        JSON.parse(
+            localStorage.getItem(
+                "pradhan16_risk_history"
+            ) || "[]"
+        );
+
+
+    history.push(riskTrade);
+
+
+    localStorage.setItem(
+        "pradhan16_risk_history",
+        JSON.stringify(history)
+    );
+
+
+    displayRiskHistory();
+}
+
+
+/* =========================================================
+   DISPLAY RISK HISTORY
+   ========================================================= */
+
+function displayRiskHistory() {
+
+    const container =
+        document.getElementById("riskHistory");
+
+    if (!container) return;
+
+
+    const history =
+        JSON.parse(
+            localStorage.getItem(
+                "pradhan16_risk_history"
+            ) || "[]"
+        );
+
+
+    if (history.length === 0) {
+
+        container.innerHTML =
+            "<p>No risk history yet.</p>";
+
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    history.slice().reverse().forEach(
+        (trade, index) => {
+
+            const div =
+                document.createElement("div");
+
+
+            div.innerHTML = `
+
+                <hr>
+
+                <h3>
+                    Trade ${history.length - index}
+                </h3>
+
+                <p>
+                    Capital:
+                    ₹${trade.capital.toFixed(2)}
+                </p>
+
+                <p>
+                    Risk:
+                    ${trade.riskPercent.toFixed(2)}%
+                </p>
+
+                <p>
+                    Entry:
+                    ₹${trade.entryPrice.toFixed(2)}
+                </p>
+
+                <p>
+                    Stop Loss:
+                    ₹${trade.stopLossPrice.toFixed(2)}
+                </p>
+
+                <p>
+                    Risk Amount:
+                    ₹${trade.riskAmount.toFixed(2)}
+                </p>
+
+                <p>
+                    Risk Per Unit:
+                    ₹${trade.riskPerUnit.toFixed(2)}
+                </p>
+
+                <p>
+                    Position Size:
+                    ${trade.quantity}
+                </p>
+
+                <p>
+                    Date:
+                    ${trade.date}
+                </p>
+
+            `;
+
+
+            container.appendChild(div);
+
+        }
+    );
+}
