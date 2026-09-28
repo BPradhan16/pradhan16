@@ -658,7 +658,6 @@ function updateRiskDashboard() {
     document.getElementById("dashboardPositionSize").innerText =
         positionSize;
 }
-        
 /* =========================================
    REFRESH EVERYTHING
    ========================================= */
