@@ -894,6 +894,12 @@ function calculatePositionSize() {
     // DAY 28
     updateRiskDashboard();
 }
+document.getElementById("positionQuantity").innerText =
+    quantity;
+
+updateRiskDashboard();
+
+saveRiskHistory();
 
 
 /* =========================================================
@@ -1051,6 +1057,8 @@ function refreshDashboard() {
     calculateRiskMetrics();
 
     updateRiskDashboard();
+
+    displayRiskHistory();
 }
 
 
