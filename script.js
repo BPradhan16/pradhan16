@@ -1,4 +1,6 @@
 alert("Pradhan16 JavaScript Loaded!");
+
+
 /* =========================================================
    PRADHAN16 AI — TRADING JOURNAL
    DAY 17 → DAY 29
@@ -11,7 +13,8 @@ alert("Pradhan16 JavaScript Loaded!");
 
 function setText(id, value) {
 
-    const element = document.getElementById(id);
+    const element =
+        document.getElementById(id);
 
     if (element) {
         element.textContent = value;
@@ -29,7 +32,9 @@ function openJournal() {
         document.getElementById("journal");
 
     if (journal) {
+
         journal.style.display = "block";
+
     }
 }
 
@@ -41,13 +46,20 @@ function openJournal() {
 function calculatePL() {
 
     const entry =
-        Number(document.getElementById("entry")?.value) || 0;
+        Number(
+            document.getElementById("entry")?.value
+        ) || 0;
 
     const exit =
-        Number(document.getElementById("exit")?.value) || 0;
+        Number(
+            document.getElementById("exit")?.value
+        ) || 0;
 
     const quantity =
-        Number(document.getElementById("quantity")?.value) || 0;
+        Number(
+            document.getElementById("quantity")?.value
+        ) || 0;
+
 
     if (
         entry <= 0 ||
@@ -63,8 +75,10 @@ function calculatePL() {
         return;
     }
 
+
     const profitLoss =
         (exit - entry) * quantity;
+
 
     setText(
         "plMessage",
@@ -80,16 +94,33 @@ function calculatePL() {
 function saveTrade() {
 
     const symbol =
-        document.getElementById("symbol")?.value.trim();
+        document.getElementById(
+            "symbol"
+        )?.value.trim();
+
 
     const entry =
-        Number(document.getElementById("entry")?.value) || 0;
+        Number(
+            document.getElementById(
+                "entry"
+            )?.value
+        ) || 0;
+
 
     const exit =
-        Number(document.getElementById("exit")?.value) || 0;
+        Number(
+            document.getElementById(
+                "exit"
+            )?.value
+        ) || 0;
+
 
     const quantity =
-        Number(document.getElementById("quantity")?.value) || 0;
+        Number(
+            document.getElementById(
+                "quantity"
+            )?.value
+        ) || 0;
 
 
     if (
@@ -99,7 +130,9 @@ function saveTrade() {
         quantity <= 0
     ) {
 
-        alert("Please enter all trade details.");
+        alert(
+            "Please enter all trade details."
+        );
 
         return;
     }
@@ -121,7 +154,8 @@ function saveTrade() {
 
         profitLoss: profitLoss,
 
-        date: new Date().toLocaleString()
+        date:
+            new Date().toLocaleString()
 
     };
 
@@ -143,7 +177,9 @@ function saveTrade() {
     );
 
 
-    alert("Trade saved successfully!");
+    alert(
+        "Trade saved successfully!"
+    );
 
 
     refreshDashboard();
@@ -157,9 +193,14 @@ function saveTrade() {
 function openReview() {
 
     const container =
-        document.getElementById("tradeList");
+        document.getElementById(
+            "tradeList"
+        );
 
-    if (!container) return;
+
+    if (!container) {
+        return;
+    }
 
 
     const trades =
@@ -182,58 +223,72 @@ function openReview() {
     container.innerHTML = "";
 
 
-    trades.slice().reverse().forEach(
-        (trade, index) => {
+    trades
+        .slice()
+        .reverse()
+        .forEach(
+            (trade, index) => {
 
-            const div =
-                document.createElement("div");
-
-
-            div.innerHTML = `
-
-                <hr>
-
-                <h3>
-                    Trade ${trades.length - index}
-                </h3>
-
-                <p>
-                    Symbol:
-                    ${trade.symbol}
-                </p>
-
-                <p>
-                    Entry:
-                    ₹${Number(trade.entry).toFixed(2)}
-                </p>
-
-                <p>
-                    Exit:
-                    ₹${Number(trade.exit).toFixed(2)}
-                </p>
-
-                <p>
-                    Quantity:
-                    ${Number(trade.quantity)}
-                </p>
-
-                <p>
-                    P/L:
-                    ₹${Number(trade.profitLoss).toFixed(2)}
-                </p>
-
-                <p>
-                    Date:
-                    ${trade.date}
-                </p>
-
-            `;
+                const div =
+                    document.createElement(
+                        "div"
+                    );
 
 
-            container.appendChild(div);
+                div.innerHTML = `
 
-        }
-    );
+                    <hr>
+
+                    <h3>
+                        Trade
+                        ${trades.length - index}
+                    </h3>
+
+                    <p>
+                        Symbol:
+                        ${trade.symbol}
+                    </p>
+
+                    <p>
+                        Entry:
+                        ₹${Number(
+                            trade.entry
+                        ).toFixed(2)}
+                    </p>
+
+                    <p>
+                        Exit:
+                        ₹${Number(
+                            trade.exit
+                        ).toFixed(2)}
+                    </p>
+
+                    <p>
+                        Quantity:
+                        ${Number(
+                            trade.quantity
+                        )}
+                    </p>
+
+                    <p>
+                        P/L:
+                        ₹${Number(
+                            trade.profitLoss
+                        ).toFixed(2)}
+                    </p>
+
+                    <p>
+                        Date:
+                        ${trade.date}
+                    </p>
+
+                `;
+
+
+                container.appendChild(div);
+
+            }
+        );
 }
 
 
@@ -258,21 +313,28 @@ function calculateStatistics() {
     const winningTrades =
         trades.filter(
             trade =>
-                Number(trade.profitLoss) > 0
+                Number(
+                    trade.profitLoss
+                ) > 0
         );
 
 
     const losingTrades =
         trades.filter(
             trade =>
-                Number(trade.profitLoss) < 0
+                Number(
+                    trade.profitLoss
+                ) < 0
         );
 
 
     const grossProfit =
         winningTrades.reduce(
             (sum, trade) =>
-                sum + Number(trade.profitLoss),
+                sum +
+                Number(
+                    trade.profitLoss
+                ),
             0
         );
 
@@ -281,7 +343,10 @@ function calculateStatistics() {
         Math.abs(
             losingTrades.reduce(
                 (sum, trade) =>
-                    sum + Number(trade.profitLoss),
+                    sum +
+                    Number(
+                        trade.profitLoss
+                    ),
                 0
             )
         );
@@ -289,25 +354,31 @@ function calculateStatistics() {
 
     const winRate =
         totalTrades > 0
-            ? (winningTrades.length / totalTrades) * 100
+            ? (
+                winningTrades.length /
+                totalTrades
+            ) * 100
             : 0;
 
 
     const averageProfit =
         winningTrades.length > 0
-            ? grossProfit / winningTrades.length
+            ? grossProfit /
+              winningTrades.length
             : 0;
 
 
     const averageLoss =
         losingTrades.length > 0
-            ? grossLoss / losingTrades.length
+            ? grossLoss /
+              losingTrades.length
             : 0;
 
 
     const profitFactor =
         grossLoss > 0
-            ? grossProfit / grossLoss
+            ? grossProfit /
+              grossLoss
             : 0;
 
 
@@ -323,7 +394,8 @@ function calculateStatistics() {
                     losingTrades.length *
                     averageLoss
                 )
-            ) / totalTrades
+            ) /
+              totalTrades
             : 0;
 
 
@@ -395,9 +467,14 @@ function calculateStatistics() {
 function createPLChart() {
 
     const canvas =
-        document.getElementById("plChart");
+        document.getElementById(
+            "plChart"
+        );
 
-    if (!canvas) return;
+
+    if (!canvas) {
+        return;
+    }
 
 
     const trades =
@@ -411,14 +488,17 @@ function createPLChart() {
     const labels =
         trades.map(
             (_, index) =>
-                "Trade " + (index + 1)
+                "Trade " +
+                (index + 1)
         );
 
 
     const data =
         trades.map(
             trade =>
-                Number(trade.profitLoss)
+                Number(
+                    trade.profitLoss
+                )
         );
 
 
@@ -432,7 +512,8 @@ function createPLChart() {
 
 
     if (
-        typeof Chart === "undefined"
+        typeof Chart ===
+        "undefined"
     ) {
 
         return;
@@ -454,7 +535,8 @@ function createPLChart() {
 
                         {
 
-                            label: "Profit / Loss",
+                            label:
+                                "Profit / Loss",
 
                             data: data
 
@@ -468,7 +550,8 @@ function createPLChart() {
 
                     responsive: true,
 
-                    maintainAspectRatio: false
+                    maintainAspectRatio:
+                        false
 
                 }
 
@@ -484,9 +567,14 @@ function createPLChart() {
 function updateEquityChart() {
 
     const canvas =
-        document.getElementById("equityChart");
+        document.getElementById(
+            "equityChart"
+        );
 
-    if (!canvas) return;
+
+    if (!canvas) {
+        return;
+    }
 
 
     const trades =
@@ -505,7 +593,9 @@ function updateEquityChart() {
             trade => {
 
                 cumulativePL +=
-                    Number(trade.profitLoss);
+                    Number(
+                        trade.profitLoss
+                    );
 
                 return cumulativePL;
 
@@ -516,7 +606,8 @@ function updateEquityChart() {
     const labels =
         trades.map(
             (_, index) =>
-                "Trade " + (index + 1)
+                "Trade " +
+                (index + 1)
         );
 
 
@@ -530,7 +621,8 @@ function updateEquityChart() {
 
 
     if (
-        typeof Chart === "undefined"
+        typeof Chart ===
+        "undefined"
     ) {
 
         return;
@@ -552,9 +644,11 @@ function updateEquityChart() {
 
                         {
 
-                            label: "Equity Curve",
+                            label:
+                                "Equity Curve",
 
-                            data: equityData,
+                            data:
+                                equityData,
 
                             tension: 0.2
 
@@ -568,7 +662,8 @@ function updateEquityChart() {
 
                     responsive: true,
 
-                    maintainAspectRatio: false
+                    maintainAspectRatio:
+                        false
 
                 }
 
@@ -602,7 +697,9 @@ function calculateDrawdown() {
         trade => {
 
             cumulativePL +=
-                Number(trade.profitLoss);
+                Number(
+                    trade.profitLoss
+                );
 
 
             if (
@@ -616,11 +713,13 @@ function calculateDrawdown() {
 
 
             const drawdown =
-                peak - cumulativePL;
+                peak -
+                cumulativePL;
 
 
             if (
-                drawdown > maxDrawdown
+                drawdown >
+                maxDrawdown
             ) {
 
                 maxDrawdown =
@@ -633,7 +732,8 @@ function calculateDrawdown() {
 
 
     const currentDrawdown =
-        peak - cumulativePL;
+        peak -
+        cumulativePL;
 
 
     setText(
@@ -675,7 +775,9 @@ function calculateRiskMetrics() {
         );
 
 
-    if (trades.length === 0) {
+    if (
+        trades.length === 0
+    ) {
 
         setText(
             "averageRisk",
@@ -710,10 +812,16 @@ function calculateRiskMetrics() {
         trades.map(
             trade =>
                 Math.abs(
-                    Number(trade.exit) -
-                    Number(trade.entry)
+                    Number(
+                        trade.exit
+                    ) -
+                    Number(
+                        trade.entry
+                    )
                 ) *
-                Number(trade.quantity)
+                Number(
+                    trade.quantity
+                )
         );
 
 
@@ -721,11 +829,15 @@ function calculateRiskMetrics() {
         trades
             .filter(
                 trade =>
-                    Number(trade.profitLoss) > 0
+                    Number(
+                        trade.profitLoss
+                    ) > 0
             )
             .map(
                 trade =>
-                    Number(trade.profitLoss)
+                    Number(
+                        trade.profitLoss
+                    )
             );
 
 
@@ -734,11 +846,14 @@ function calculateRiskMetrics() {
             (sum, value) =>
                 sum + value,
             0
-        ) / risks.length;
+        ) /
+        risks.length;
 
 
     const maximumRisk =
-        Math.max(...risks);
+        Math.max(
+            ...risks
+        );
 
 
     const averageReward =
@@ -747,13 +862,15 @@ function calculateRiskMetrics() {
                 (sum, value) =>
                     sum + value,
                 0
-            ) / rewards.length
+            ) /
+              rewards.length
             : 0;
 
 
     const averageRR =
         averageRisk > 0
-            ? averageReward / averageRisk
+            ? averageReward /
+              averageRisk
             : 0;
 
 
@@ -796,25 +913,33 @@ function calculateRiskReward() {
 
     const entry =
         Number(
-            document.getElementById("rrEntry")?.value
+            document.getElementById(
+                "rrEntry"
+            )?.value
         ) || 0;
 
 
     const stopLoss =
         Number(
-            document.getElementById("rrStopLoss")?.value
+            document.getElementById(
+                "rrStopLoss"
+            )?.value
         ) || 0;
 
 
     const target =
         Number(
-            document.getElementById("rrTarget")?.value
+            document.getElementById(
+                "rrTarget"
+            )?.value
         ) || 0;
 
 
     const quantity =
         Number(
-            document.getElementById("rrQuantity")?.value
+            document.getElementById(
+                "rrQuantity"
+            )?.value
         ) || 0;
 
 
@@ -835,17 +960,23 @@ function calculateRiskReward() {
 
     const risk =
         Math.abs(
-            entry - stopLoss
-        ) * quantity;
+            entry -
+            stopLoss
+        ) *
+        quantity;
 
 
     const reward =
         Math.abs(
-            target - entry
-        ) * quantity;
+            target -
+            entry
+        ) *
+        quantity;
 
 
-    if (risk <= 0) {
+    if (
+        risk <= 0
+    ) {
 
         alert(
             "Risk cannot be zero."
@@ -856,7 +987,8 @@ function calculateRiskReward() {
 
 
     const ratio =
-        reward / risk;
+        reward /
+        risk;
 
 
     setText(
@@ -877,7 +1009,9 @@ function calculateRiskReward() {
     );
 
 
-    if (ratio >= 2) {
+    if (
+        ratio >= 2
+    ) {
 
         setText(
             "rrStatus",
@@ -906,25 +1040,33 @@ function calculatePositionSize() {
 
     const capital =
         Number(
-            document.getElementById("capital")?.value
+            document.getElementById(
+                "capital"
+            )?.value
         ) || 0;
 
 
     const riskPercent =
         Number(
-            document.getElementById("riskPercent")?.value
+            document.getElementById(
+                "riskPercent"
+            )?.value
         ) || 0;
 
 
     const entryPrice =
         Number(
-            document.getElementById("entryPrice")?.value
+            document.getElementById(
+                "entryPrice"
+            )?.value
         ) || 0;
 
 
     const stopLossPrice =
         Number(
-            document.getElementById("stopLossPrice")?.value
+            document.getElementById(
+                "stopLossPrice"
+            )?.value
         ) || 0;
 
 
@@ -992,12 +1134,8 @@ function calculatePositionSize() {
         quantity;
 
 
-    /* DAY 28 */
-
     updateRiskDashboard();
 
-
-    /* DAY 29 */
 
     saveRiskHistory();
 }
@@ -1070,7 +1208,8 @@ function updateRiskDashboard() {
 
     setText(
         "dashboardRiskPercent",
-        riskPercent.toFixed(2) + "%"
+        riskPercent.toFixed(2) +
+        "%"
     );
 
 
@@ -1091,8 +1230,6 @@ function updateRiskDashboard() {
         positionSize
     );
 
-
-    /* Risk / Reward */
 
     const rrEntry =
         Number(
@@ -1281,7 +1418,9 @@ function saveRiskHistory() {
 
     localStorage.setItem(
         "pradhan16_risk_history",
-        JSON.stringify(history)
+        JSON.stringify(
+            history
+        )
     );
 
 
@@ -1301,7 +1440,9 @@ function displayRiskHistory() {
         );
 
 
-    if (!container) return;
+    if (!container) {
+        return;
+    }
 
 
     const history =
@@ -1414,7 +1555,7 @@ function displayRiskHistory() {
 
 
 /* =========================================================
-   REFRESH COMPLETE DASHBOARD
+   COMPLETE DASHBOARD REFRESH
    ========================================================= */
 
 function refreshDashboard() {
