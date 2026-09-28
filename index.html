@@ -334,45 +334,88 @@
     </p>
 
 </section>
-<!-- =========================================
-     DAY 28 — RISK DASHBOARD
-     ========================================= -->
+/* =========================================
+   DAY 28 — RISK DASHBOARD
+   ========================================= */
 
-<section class="dashboard-card">
+function updateRiskDashboard() {
 
-    <h2>🛡️ Risk Dashboard</h2>
+    const capital =
+        Number(document.getElementById("capital")?.value) || 0;
 
-    <p>
-        Capital:
-        ₹<span id="dashboardCapital">0.00</span>
-    </p>
+    const riskPercent =
+        Number(document.getElementById("riskPercent")?.value) || 0;
 
-    <p>
-        Risk %:
-        <span id="dashboardRiskPercent">0%</span>
-    </p>
+    const entryPrice =
+        Number(document.getElementById("entryPrice")?.value) || 0;
 
-    <p>
-        Risk Amount:
-        ₹<span id="dashboardRiskAmount">0.00</span>
-    </p>
+    const stopLossPrice =
+        Number(document.getElementById("stopLossPrice")?.value) || 0;
 
-    <p>
-        Risk Per Unit:
-        ₹<span id="dashboardRiskPerUnit">0.00</span>
-    </p>
+    const riskAmount =
+        capital * riskPercent / 100;
 
-    <p>
-        Position Size:
-        <span id="dashboardPositionSize">0</span>
-    </p>
+    const riskPerUnit =
+        Math.abs(entryPrice - stopLossPrice);
 
-    <p>
-        Risk/Reward:
-        <span id="dashboardRR">0.00</span>
-    </p>
+    const positionSize =
+        riskPerUnit > 0
+            ? Math.floor(riskAmount / riskPerUnit)
+            : 0;
 
-</section>
+    setText(
+        "dashboardCapital",
+        capital.toFixed(2)
+    );
+
+    setText(
+        "dashboardRiskPercent",
+        riskPercent.toFixed(2) + "%"
+    );
+
+    setText(
+        "dashboardRiskAmount",
+        riskAmount.toFixed(2)
+    );
+
+    setText(
+        "dashboardRiskPerUnit",
+        riskPerUnit.toFixed(2)
+    );
+
+    setText(
+        "dashboardPositionSize",
+        positionSize
+    );
+
+    // Risk/Reward
+    const targetPrice =
+        Number(document.getElementById("targetPrice")?.value) || 0;
+
+    let rr = 0;
+
+    if (
+        entryPrice > 0 &&
+        stopLossPrice > 0 &&
+        targetPrice > 0
+    ) {
+
+        const risk =
+            Math.abs(entryPrice - stopLossPrice);
+
+        const reward =
+            Math.abs(targetPrice - entryPrice);
+
+        if (risk > 0) {
+            rr = reward / risk;
+        }
+    }
+
+    setText(
+        "dashboardRR",
+        rr.toFixed(2)
+    );
+}
 <!-- =========================================
      DAY 25 — RISK METRICS
      ========================================= -->
