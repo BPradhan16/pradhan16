@@ -1554,7 +1554,90 @@ function displayRiskHistory() {
 }
 
 
-/* =========================================================
+/*
+/* =========================================
+   DAY 30 — RISK HISTORY ANALYTICS
+   ========================================= */
+
+function calculateRiskHistoryAnalytics() {
+
+    const history = JSON.parse(
+        localStorage.getItem("pradhan16_risk_history") || "[]"
+    );
+
+    if (history.length === 0) {
+
+        setText("totalRiskTrades", "0");
+        setText("totalRiskAmount", "0.00");
+        setText("averageRiskPercent", "0.00%");
+        setText("maximumRiskPercent", "0.00%");
+        setText("averagePositionSize", "0");
+        setText("highestRiskAmount", "0.00");
+
+        return;
+    }
+
+    const totalRiskTrades = history.length;
+
+    const totalRiskAmount = history.reduce(
+        (sum, trade) => sum + Number(trade.riskAmount),
+        0
+    );
+
+    const averageRiskPercent =
+        history.reduce(
+            (sum, trade) => sum + Number(trade.riskPercent),
+            0
+        ) / totalRiskTrades;
+
+    const maximumRiskPercent = Math.max(
+        ...history.map(
+            trade => Number(trade.riskPercent)
+        )
+    );
+
+    const averagePositionSize =
+        history.reduce(
+            (sum, trade) => sum + Number(trade.quantity),
+            0
+        ) / totalRiskTrades;
+
+    const highestRiskAmount = Math.max(
+        ...history.map(
+            trade => Number(trade.riskAmount)
+        )
+    );
+
+    setText(
+        "totalRiskTrades",
+        totalRiskTrades
+    );
+
+    setText(
+        "totalRiskAmount",
+        totalRiskAmount.toFixed(2)
+    );
+
+    setText(
+        "averageRiskPercent",
+        averageRiskPercent.toFixed(2) + "%"
+    );
+
+    setText(
+        "maximumRiskPercent",
+        maximumRiskPercent.toFixed(2) + "%"
+    );
+
+    setText(
+        "averagePositionSize",
+        Math.floor(averagePositionSize)
+    );
+
+    setText(
+        "highestRiskAmount",
+        highestRiskAmount.toFixed(2)
+    );
+} =========================================================
    COMPLETE DASHBOARD REFRESH
    ========================================================= */
 
