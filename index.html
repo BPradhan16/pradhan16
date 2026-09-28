@@ -22,6 +22,7 @@
 
 <body>
 
+
 <div class="container">
 
     <!-- =========================================
@@ -72,7 +73,6 @@
                 placeholder="Quantity"
             >
 
-
             <br><br>
 
 
@@ -119,60 +119,50 @@
 
         <h2>📊 Trading Statistics</h2>
 
-
         <p>
             Total Trades:
             <span id="totalTrades">0</span>
         </p>
-
 
         <p>
             Winning Trades:
             <span id="winningTrades">0</span>
         </p>
 
-
         <p>
             Losing Trades:
             <span id="losingTrades">0</span>
         </p>
-
 
         <p>
             Win Rate:
             <span id="winRate">0%</span>
         </p>
 
-
         <p>
             Gross Profit:
             ₹<span id="grossProfit">0.00</span>
         </p>
-
 
         <p>
             Gross Loss:
             ₹<span id="grossLoss">0.00</span>
         </p>
 
-
         <p>
             Average Profit:
             ₹<span id="averageProfit">0.00</span>
         </p>
-
 
         <p>
             Average Loss:
             ₹<span id="averageLoss">0.00</span>
         </p>
 
-
         <p>
             Profit Factor:
             <span id="profitFactor">0.00</span>
         </p>
-
 
         <p>
             Expectancy:
@@ -191,7 +181,11 @@
 
         <h2>📈 Profit / Loss Chart</h2>
 
-        <canvas id="plChart"></canvas>
+        <div style="height:300px;">
+
+            <canvas id="plChart"></canvas>
+
+        </div>
 
     </section>
 
@@ -205,7 +199,11 @@
 
         <h2>📈 Equity Curve</h2>
 
-        <canvas id="equityChart"></canvas>
+        <div style="height:300px;">
+
+            <canvas id="equityChart"></canvas>
+
+        </div>
 
     </section>
 
@@ -219,24 +217,20 @@
 
         <h2>📉 Drawdown Analysis</h2>
 
-
         <p>
             Current Drawdown:
             ₹<span id="currentDrawdown">0.00</span>
         </p>
-
 
         <p>
             Maximum Drawdown:
             ₹<span id="maxDrawdown">0.00</span>
         </p>
 
-
         <p>
             Peak P/L:
             ₹<span id="peakPL">0.00</span>
         </p>
-
 
         <p>
             Current P/L:
@@ -255,30 +249,25 @@
 
         <h2>🛡️ Risk Metrics</h2>
 
-
         <p>
             Average Risk:
             ₹<span id="averageRisk">0.00</span>
         </p>
-
 
         <p>
             Maximum Risk:
             ₹<span id="maximumRisk">0.00</span>
         </p>
 
-
         <p>
             Average Reward:
             ₹<span id="averageReward">0.00</span>
         </p>
 
-
         <p>
             Average Risk/Reward:
             <span id="averageRR">0.00</span>
         </p>
-
 
         <p>
             Risk Consistency:
@@ -297,13 +286,11 @@
 
         <h2>⚖️ Risk / Reward Calculator</h2>
 
-
         <input
             type="number"
             id="rrEntry"
             placeholder="Entry Price"
         >
-
 
         <input
             type="number"
@@ -311,13 +298,11 @@
             placeholder="Stop Loss"
         >
 
-
         <input
             type="number"
             id="rrTarget"
             placeholder="Target Price"
         >
-
 
         <input
             type="number"
@@ -325,29 +310,24 @@
             placeholder="Quantity"
         >
 
-
         <button onclick="calculateRiskReward()">
             Calculate Risk / Reward
         </button>
-
 
         <p>
             Risk Amount:
             ₹<span id="riskAmount">0.00</span>
         </p>
 
-
         <p>
             Reward Amount:
             ₹<span id="rewardAmount">0.00</span>
         </p>
 
-
         <p>
             Risk / Reward Ratio:
-            <span id="riskRewardRatio">0 : 0</span>
+            <span id="riskRewardRatio">0.00</span>
         </p>
-
 
         <p id="rrStatus"></p>
 
@@ -363,13 +343,11 @@
 
         <h2>📐 Position Size Calculator</h2>
 
-
         <input
             type="number"
             id="capital"
             placeholder="Total Capital"
         >
-
 
         <input
             type="number"
@@ -377,13 +355,11 @@
             placeholder="Risk % per Trade"
         >
 
-
         <input
             type="number"
             id="entryPrice"
             placeholder="Entry Price"
         >
-
 
         <input
             type="number"
@@ -391,23 +367,19 @@
             placeholder="Stop Loss Price"
         >
 
-
         <button onclick="calculatePositionSize()">
             Calculate Position Size
         </button>
-
 
         <p>
             Risk Amount:
             ₹<span id="positionRisk">0.00</span>
         </p>
 
-
         <p>
             Risk Per Unit:
             ₹<span id="riskPerUnit">0.00</span>
         </p>
-
 
         <p>
             Suggested Quantity:
@@ -426,36 +398,30 @@
 
         <h2>🛡️ Risk Dashboard</h2>
 
-
         <p>
             Capital:
             ₹<span id="dashboardCapital">0.00</span>
         </p>
-
 
         <p>
             Risk %:
             <span id="dashboardRiskPercent">0%</span>
         </p>
 
-
         <p>
             Risk Amount:
             ₹<span id="dashboardRiskAmount">0.00</span>
         </p>
-
 
         <p>
             Risk Per Unit:
             ₹<span id="dashboardRiskPerUnit">0.00</span>
         </p>
 
-
         <p>
             Position Size:
             <span id="dashboardPositionSize">0</span>
         </p>
-
 
         <p>
             Risk / Reward:
@@ -465,23 +431,27 @@
     </section>
 
 
+
+    <!-- =========================================
+         DAY 29 — TRADE RISK HISTORY
+         ========================================= -->
+
+    <section class="dashboard-card">
+
+        <h2>📋 Trade Risk History</h2>
+
+        <div id="riskHistory">
+
+            <p>No risk history yet.</p>
+
+        </div>
+
+    </section>
+
+
 </div>
 
-<!-- =========================================
-     DAY 29 — TRADE RISK HISTORY
-     ========================================= -->
 
-<section class="dashboard-card">
-
-    <h2>📋 Trade Risk History</h2>
-
-    <div id="riskHistory">
-
-        <p>No risk history yet.</p>
-
-    </div>
-
-</section>
 <!-- =========================================
      CHART.JS
      ========================================= -->
