@@ -1,7 +1,6 @@
 /* =========================================================
-   PRADHAN16 AI — COMPLETE SCRIPT
-   DAY 17 → DAY 28
-   Trading Journal + Statistics + Charts + Risk Tools
+   PRADHAN16 AI — TRADING JOURNAL
+   DAY 17 → DAY 29
    ========================================================= */
 
 
@@ -20,7 +19,7 @@ function setText(id, value) {
 
 
 /* =========================================================
-   TRADING JOURNAL
+   DAY 17 — OPEN TRADING JOURNAL
    ========================================================= */
 
 function openJournal() {
@@ -35,20 +34,19 @@ function openJournal() {
 
 
 /* =========================================================
-   CALCULATE P/L
+   DAY 18 — CALCULATE P/L
    ========================================================= */
 
 function calculatePL() {
 
     const entry =
-        Number(document.getElementById("entry").value);
+        Number(document.getElementById("entry")?.value) || 0;
 
     const exit =
-        Number(document.getElementById("exit").value);
+        Number(document.getElementById("exit")?.value) || 0;
 
     const quantity =
-        Number(document.getElementById("quantity").value);
-
+        Number(document.getElementById("quantity")?.value) || 0;
 
     if (
         entry <= 0 ||
@@ -56,39 +54,41 @@ function calculatePL() {
         quantity <= 0
     ) {
 
-        document.getElementById("plMessage").innerText =
-            "Please enter Entry, Exit and Quantity.";
+        setText(
+            "plMessage",
+            "Please enter valid values."
+        );
 
         return;
     }
 
-
     const profitLoss =
         (exit - entry) * quantity;
 
-
-    document.getElementById("plMessage").innerText =
-        "P/L: ₹" + profitLoss.toFixed(2);
+    setText(
+        "plMessage",
+        "P/L: ₹" + profitLoss.toFixed(2)
+    );
 }
 
 
 /* =========================================================
-   SAVE TRADE
+   DAY 18 — SAVE TRADE
    ========================================================= */
 
 function saveTrade() {
 
     const symbol =
-        document.getElementById("symbol").value.trim();
+        document.getElementById("symbol")?.value.trim();
 
     const entry =
-        Number(document.getElementById("entry").value);
+        Number(document.getElementById("entry")?.value) || 0;
 
     const exit =
-        Number(document.getElementById("exit").value);
+        Number(document.getElementById("exit")?.value) || 0;
 
     const quantity =
-        Number(document.getElementById("quantity").value);
+        Number(document.getElementById("quantity")?.value) || 0;
 
 
     if (
@@ -98,8 +98,7 @@ function saveTrade() {
         quantity <= 0
     ) {
 
-        document.getElementById("tradeMessage").innerText =
-            "Please fill all trade details.";
+        alert("Please enter all trade details.");
 
         return;
     }
@@ -122,12 +121,15 @@ function saveTrade() {
         profitLoss: profitLoss,
 
         date: new Date().toLocaleString()
+
     };
 
 
     let trades =
         JSON.parse(
-            localStorage.getItem("pradhan16_trades") || "[]"
+            localStorage.getItem(
+                "pradhan16_trades"
+            ) || "[]"
         );
 
 
@@ -140,8 +142,7 @@ function saveTrade() {
     );
 
 
-    document.getElementById("tradeMessage").innerText =
-        "✅ Trade saved successfully!";
+    alert("Trade saved successfully!");
 
 
     refreshDashboard();
@@ -149,78 +150,89 @@ function saveTrade() {
 
 
 /* =========================================================
-   OPEN TRADE REVIEW
+   DAY 18 — OPEN TRADE REVIEW
    ========================================================= */
 
 function openReview() {
 
-    const review =
-        document.getElementById("review");
+    const container =
+        document.getElementById("tradeList");
 
-    if (!review) return;
-
-
-    review.style.display = "block";
+    if (!container) return;
 
 
     const trades =
         JSON.parse(
-            localStorage.getItem("pradhan16_trades") || "[]"
+            localStorage.getItem(
+                "pradhan16_trades"
+            ) || "[]"
         );
-
-
-    const tradeList =
-        document.getElementById("tradeList");
-
-
-    if (!tradeList) return;
-
-
-    tradeList.innerHTML = "";
 
 
     if (trades.length === 0) {
 
-        tradeList.innerHTML =
-            "<p>No trades available.</p>";
+        container.innerHTML =
+            "<p>No trades yet.</p>";
 
         return;
     }
 
 
-    trades.forEach((trade, index) => {
-
-        const div =
-            document.createElement("div");
+    container.innerHTML = "";
 
 
-        div.innerHTML = `
+    trades.slice().reverse().forEach(
+        (trade, index) => {
 
-            <hr>
-
-            <p><strong>Trade ${index + 1}</strong></p>
-
-            <p>Symbol: ${trade.symbol}</p>
-
-            <p>Entry: ₹${Number(trade.entry).toFixed(2)}</p>
-
-            <p>Exit: ₹${Number(trade.exit).toFixed(2)}</p>
-
-            <p>Quantity: ${Number(trade.quantity)}</p>
-
-            <p>
-                P/L:
-                ₹${Number(trade.profitLoss).toFixed(2)}
-            </p>
-
-            <p>Date: ${trade.date}</p>
-
-        `;
+            const div =
+                document.createElement("div");
 
 
-        tradeList.appendChild(div);
+            div.innerHTML = `
 
-    });
+                <hr>
+
+                <h3>
+                    Trade ${trades.length - index}
+                </h3>
+
+                <p>
+                    Symbol:
+                    ${trade.symbol}
+                </p>
+
+                <p>
+                    Entry:
+                    ₹${Number(trade.entry).toFixed(2)}
+                </p>
+
+                <p>
+                    Exit:
+                    ₹${Number(trade.exit).toFixed(2)}
+                </p>
+
+                <p>
+                    Quantity:
+                    ${Number(trade.quantity)}
+                </p>
+
+                <p>
+                    P/L:
+                    ₹${Number(trade.profitLoss).toFixed(2)}
+                </p>
+
+                <p>
+                    Date:
+                    ${trade.date}
+                </p>
+
+            `;
+
+
+            container.appendChild(div);
+
+        }
+    );
 }
 
 
@@ -232,7 +244,9 @@ function calculateStatistics() {
 
     const trades =
         JSON.parse(
-            localStorage.getItem("pradhan16_trades") || "[]"
+            localStorage.getItem(
+                "pradhan16_trades"
+            ) || "[]"
         );
 
 
@@ -240,74 +254,75 @@ function calculateStatistics() {
         trades.length;
 
 
-    let winningTrades = 0;
-
-    let losingTrades = 0;
-
-    let grossProfit = 0;
-
-    let grossLoss = 0;
+    const winningTrades =
+        trades.filter(
+            trade =>
+                Number(trade.profitLoss) > 0
+        );
 
 
-    trades.forEach(trade => {
+    const losingTrades =
+        trades.filter(
+            trade =>
+                Number(trade.profitLoss) < 0
+        );
 
-        const pl =
-            Number(trade.profitLoss) || 0;
+
+    const grossProfit =
+        winningTrades.reduce(
+            (sum, trade) =>
+                sum + Number(trade.profitLoss),
+            0
+        );
 
 
-        if (pl > 0) {
-
-            winningTrades++;
-
-            grossProfit += pl;
-
-        }
-
-        else if (pl < 0) {
-
-            losingTrades++;
-
-            grossLoss += Math.abs(pl);
-
-        }
-
-    });
+    const grossLoss =
+        Math.abs(
+            losingTrades.reduce(
+                (sum, trade) =>
+                    sum + Number(trade.profitLoss),
+                0
+            )
+        );
 
 
     const winRate =
         totalTrades > 0
-            ? (winningTrades / totalTrades) * 100
+            ? (winningTrades.length / totalTrades) * 100
             : 0;
 
 
     const averageProfit =
-        winningTrades > 0
-            ? grossProfit / winningTrades
+        winningTrades.length > 0
+            ? grossProfit / winningTrades.length
             : 0;
 
 
     const averageLoss =
-        losingTrades > 0
-            ? grossLoss / losingTrades
+        losingTrades.length > 0
+            ? grossLoss / losingTrades.length
             : 0;
 
 
     const profitFactor =
         grossLoss > 0
             ? grossProfit / grossLoss
-            : grossProfit > 0
-                ? Infinity
-                : 0;
+            : 0;
 
 
     const expectancy =
         totalTrades > 0
             ? (
-                (winRate / 100) * averageProfit
-            ) -
-            (
-                (1 - winRate / 100) * averageLoss
-            )
+                (
+                    winningTrades.length *
+                    averageProfit
+                )
+                -
+                (
+                    losingTrades.length *
+                    averageLoss
+                )
+            ) / totalTrades
             : 0;
 
 
@@ -319,13 +334,13 @@ function calculateStatistics() {
 
     setText(
         "winningTrades",
-        winningTrades
+        winningTrades.length
     );
 
 
     setText(
         "losingTrades",
-        losingTrades
+        losingTrades.length
     );
 
 
@@ -361,9 +376,7 @@ function calculateStatistics() {
 
     setText(
         "profitFactor",
-        profitFactor === Infinity
-            ? "∞"
-            : profitFactor.toFixed(2)
+        profitFactor.toFixed(2)
     );
 
 
@@ -375,7 +388,7 @@ function calculateStatistics() {
 
 
 /* =========================================================
-   DAY 21 — P/L CHART
+   DAY 21 — P/L PERFORMANCE CHART
    ========================================================= */
 
 function createPLChart() {
@@ -383,76 +396,83 @@ function createPLChart() {
     const canvas =
         document.getElementById("plChart");
 
-
     if (!canvas) return;
 
 
     const trades =
         JSON.parse(
-            localStorage.getItem("pradhan16_trades") || "[]"
+            localStorage.getItem(
+                "pradhan16_trades"
+            ) || "[]"
         );
 
 
     const labels =
         trades.map(
-            (_, index) => "Trade " + (index + 1)
+            (_, index) =>
+                "Trade " + (index + 1)
         );
 
 
-    const values =
+    const data =
         trades.map(
-            trade => Number(trade.profitLoss) || 0
+            trade =>
+                Number(trade.profitLoss)
         );
+
+
+    if (
+        window.pradhanPLChart
+    ) {
+
+        window.pradhanPLChart.destroy();
+
+    }
 
 
     if (
         typeof Chart === "undefined"
     ) {
+
         return;
     }
 
 
-    if (window.plChartInstance) {
+    window.pradhanPLChart =
+        new Chart(
+            canvas,
+            {
 
-        window.plChartInstance.destroy();
+                type: "bar",
 
-    }
+                data: {
 
+                    labels: labels,
 
-    window.plChartInstance =
-        new Chart(canvas, {
+                    datasets: [
 
-            type: "bar",
+                        {
 
-            data: {
+                            label: "Profit / Loss",
 
-                labels: labels,
+                            data: data
 
-                datasets: [{
+                        }
 
-                    label: "Profit / Loss",
+                    ]
 
-                    data: values
+                },
 
-                }]
+                options: {
 
-            },
+                    responsive: true,
 
-            options: {
-
-                responsive: true,
-
-                plugins: {
-
-                    legend: {
-                        display: true
-                    }
+                    maintainAspectRatio: false
 
                 }
 
             }
-
-        });
+        );
 }
 
 
@@ -465,129 +485,154 @@ function updateEquityChart() {
     const canvas =
         document.getElementById("equityChart");
 
-
     if (!canvas) return;
 
 
     const trades =
         JSON.parse(
-            localStorage.getItem("pradhan16_trades") || "[]"
+            localStorage.getItem(
+                "pradhan16_trades"
+            ) || "[]"
         );
 
 
     let cumulativePL = 0;
 
 
-    const equity =
-        trades.map((trade, index) => {
+    const equityData =
+        trades.map(
+            trade => {
 
-            cumulativePL +=
-                Number(trade.profitLoss) || 0;
+                cumulativePL +=
+                    Number(trade.profitLoss);
 
-            return cumulativePL;
+                return cumulativePL;
 
-        });
+            }
+        );
 
 
     const labels =
         trades.map(
-            (_, index) => "Trade " + (index + 1)
+            (_, index) =>
+                "Trade " + (index + 1)
         );
+
+
+    if (
+        window.pradhanEquityChart
+    ) {
+
+        window.pradhanEquityChart.destroy();
+
+    }
 
 
     if (
         typeof Chart === "undefined"
     ) {
+
         return;
     }
 
 
-    if (window.equityChartInstance) {
+    window.pradhanEquityChart =
+        new Chart(
+            canvas,
+            {
 
-        window.equityChartInstance.destroy();
+                type: "line",
 
-    }
+                data: {
 
+                    labels: labels,
 
-    window.equityChartInstance =
-        new Chart(canvas, {
+                    datasets: [
 
-            type: "line",
+                        {
 
-            data: {
+                            label: "Equity Curve",
 
-                labels: labels,
+                            data: equityData,
 
-                datasets: [{
+                            tension: 0.2
 
-                    label: "Equity Curve",
+                        }
 
-                    data: equity,
+                    ]
 
-                    fill: false,
+                },
 
-                    tension: 0.2
+                options: {
 
-                }]
+                    responsive: true,
 
-            },
+                    maintainAspectRatio: false
 
-            options: {
-
-                responsive: true
+                }
 
             }
-
-        });
+        );
 }
 
 
 /* =========================================================
-   DAY 24 — DRAWDOWN
+   DAY 22 / 24 — DRAWDOWN ANALYSIS
    ========================================================= */
 
 function calculateDrawdown() {
 
     const trades =
         JSON.parse(
-            localStorage.getItem("pradhan16_trades") || "[]"
+            localStorage.getItem(
+                "pradhan16_trades"
+            ) || "[]"
         );
 
 
     let cumulativePL = 0;
 
-    let peakPL = 0;
-
-    let currentDrawdown = 0;
+    let peak = 0;
 
     let maxDrawdown = 0;
 
 
-    trades.forEach(trade => {
+    trades.forEach(
+        trade => {
 
-        cumulativePL +=
-            Number(trade.profitLoss) || 0;
+            cumulativePL +=
+                Number(trade.profitLoss);
 
 
-        if (cumulativePL > peakPL) {
+            if (
+                cumulativePL > peak
+            ) {
 
-            peakPL = cumulativePL;
+                peak =
+                    cumulativePL;
+
+            }
+
+
+            const drawdown =
+                peak - cumulativePL;
+
+
+            if (
+                drawdown > maxDrawdown
+            ) {
+
+                maxDrawdown =
+                    drawdown;
+
+            }
 
         }
+    );
 
 
-        currentDrawdown =
-            peakPL - cumulativePL;
-
-
-        if (currentDrawdown > maxDrawdown) {
-
-            maxDrawdown =
-                currentDrawdown;
-
-        }
-
-    });
+    const currentDrawdown =
+        peak - cumulativePL;
 
 
     setText(
@@ -604,7 +649,7 @@ function calculateDrawdown() {
 
     setText(
         "peakPL",
-        peakPL.toFixed(2)
+        peak.toFixed(2)
     );
 
 
@@ -623,7 +668,9 @@ function calculateRiskMetrics() {
 
     const trades =
         JSON.parse(
-            localStorage.getItem("pradhan16_trades") || "[]"
+            localStorage.getItem(
+                "pradhan16_trades"
+            ) || "[]"
         );
 
 
@@ -651,69 +698,55 @@ function calculateRiskMetrics() {
 
         setText(
             "riskConsistency",
-            "0%"
+            "No data"
         );
 
         return;
     }
 
 
-    let totalRisk = 0;
-
-    let maximumRisk = 0;
-
-    let totalReward = 0;
-
-    let winningTrades = 0;
-
-
-    trades.forEach(trade => {
-
-        const entry =
-            Number(trade.entry) || 0;
-
-        const exit =
-            Number(trade.exit) || 0;
-
-        const quantity =
-            Number(trade.quantity) || 0;
-
-        const pl =
-            Number(trade.profitLoss) || 0;
+    const risks =
+        trades.map(
+            trade =>
+                Math.abs(
+                    Number(trade.exit) -
+                    Number(trade.entry)
+                ) *
+                Number(trade.quantity)
+        );
 
 
-        const risk =
-            Math.abs(exit - entry) * quantity;
-
-
-        totalRisk += risk;
-
-
-        if (risk > maximumRisk) {
-
-            maximumRisk = risk;
-
-        }
-
-
-        if (pl > 0) {
-
-            totalReward += pl;
-
-            winningTrades++;
-
-        }
-
-    });
+    const rewards =
+        trades
+            .filter(
+                trade =>
+                    Number(trade.profitLoss) > 0
+            )
+            .map(
+                trade =>
+                    Number(trade.profitLoss)
+            );
 
 
     const averageRisk =
-        totalRisk / trades.length;
+        risks.reduce(
+            (sum, value) =>
+                sum + value,
+            0
+        ) / risks.length;
+
+
+    const maximumRisk =
+        Math.max(...risks);
 
 
     const averageReward =
-        winningTrades > 0
-            ? totalReward / winningTrades
+        rewards.length > 0
+            ? rewards.reduce(
+                (sum, value) =>
+                    sum + value,
+                0
+            ) / rewards.length
             : 0;
 
 
@@ -761,16 +794,27 @@ function calculateRiskMetrics() {
 function calculateRiskReward() {
 
     const entry =
-        Number(document.getElementById("rrEntry").value);
+        Number(
+            document.getElementById("rrEntry")?.value
+        ) || 0;
+
 
     const stopLoss =
-        Number(document.getElementById("rrStopLoss").value);
+        Number(
+            document.getElementById("rrStopLoss")?.value
+        ) || 0;
+
 
     const target =
-        Number(document.getElementById("rrTarget").value);
+        Number(
+            document.getElementById("rrTarget")?.value
+        ) || 0;
+
 
     const quantity =
-        Number(document.getElementById("rrQuantity").value);
+        Number(
+            document.getElementById("rrQuantity")?.value
+        ) || 0;
 
 
     if (
@@ -780,41 +824,73 @@ function calculateRiskReward() {
         quantity <= 0
     ) {
 
-        document.getElementById("rrStatus").innerText =
-            "Enter all values";
+        alert(
+            "Please enter all Risk/Reward values."
+        );
 
         return;
     }
 
 
-    const riskAmount =
-        Math.abs(entry - stopLoss) * quantity;
+    const risk =
+        Math.abs(
+            entry - stopLoss
+        ) * quantity;
 
 
-    const rewardAmount =
-        Math.abs(target - entry) * quantity;
+    const reward =
+        Math.abs(
+            target - entry
+        ) * quantity;
+
+
+    if (risk <= 0) {
+
+        alert(
+            "Risk cannot be zero."
+        );
+
+        return;
+    }
 
 
     const ratio =
-        riskAmount > 0
-            ? rewardAmount / riskAmount
-            : 0;
+        reward / risk;
 
 
-    document.getElementById("riskAmount").innerText =
-        riskAmount.toFixed(2);
+    setText(
+        "riskAmount",
+        risk.toFixed(2)
+    );
 
 
-    document.getElementById("rewardAmount").innerText =
-        rewardAmount.toFixed(2);
+    setText(
+        "rewardAmount",
+        reward.toFixed(2)
+    );
 
 
-    document.getElementById("riskRewardRatio").innerText =
-        "1 : " + ratio.toFixed(2);
+    setText(
+        "riskRewardRatio",
+        ratio.toFixed(2)
+    );
 
 
-    document.getElementById("rrStatus").innerText =
-        "Calculated ✅";
+    if (ratio >= 2) {
+
+        setText(
+            "rrStatus",
+            "Good Risk/Reward"
+        );
+
+    } else {
+
+        setText(
+            "rrStatus",
+            "Low Risk/Reward"
+        );
+
+    }
 
 
     updateRiskDashboard();
@@ -826,87 +902,6 @@ function calculateRiskReward() {
    ========================================================= */
 
 function calculatePositionSize() {
-
-    const capital =
-        Number(document.getElementById("capital").value);
-
-    const riskPercent =
-        Number(document.getElementById("riskPercent").value);
-
-    const entryPrice =
-        Number(document.getElementById("entryPrice").value);
-
-    const stopLossPrice =
-        Number(document.getElementById("stopLossPrice").value);
-
-
-    if (
-        capital <= 0 ||
-        riskPercent <= 0 ||
-        entryPrice <= 0 ||
-        stopLossPrice <= 0
-    ) {
-
-        alert("Please enter all values");
-
-        return;
-    }
-
-
-    const riskAmount =
-        capital * (riskPercent / 100);
-
-
-    const riskPerUnit =
-        Math.abs(
-            entryPrice - stopLossPrice
-        );
-
-
-    if (riskPerUnit <= 0) {
-
-        alert(
-            "Entry Price and Stop Loss cannot be same."
-        );
-
-        return;
-    }
-
-
-    const quantity =
-        Math.floor(
-            riskAmount / riskPerUnit
-        );
-
-
-    document.getElementById("positionRisk").innerText =
-        riskAmount.toFixed(2);
-
-
-    document.getElementById("riskPerUnit").innerText =
-        riskPerUnit.toFixed(2);
-
-
-    document.getElementById("positionQuantity").innerText =
-        quantity;
-
-
-    // DAY 28
-    updateRiskDashboard();
-}
-document.getElementById("positionQuantity").innerText =
-    quantity;
-
-updateRiskDashboard();
-
-saveRiskHistory();
-
-
-/* =========================================================
-   DAY 28 — RISK DASHBOARD
-   ========================================================= */
-
-function updateRiskDashboard() {
 
     const capital =
         Number(
@@ -932,20 +927,136 @@ function updateRiskDashboard() {
         ) || 0;
 
 
+    if (
+        capital <= 0 ||
+        riskPercent <= 0 ||
+        entryPrice <= 0 ||
+        stopLossPrice <= 0
+    ) {
+
+        alert(
+            "Please enter all values."
+        );
+
+        return;
+    }
+
+
     const riskAmount =
-        capital * (riskPercent / 100);
+        capital *
+        (riskPercent / 100);
 
 
     const riskPerUnit =
         Math.abs(
-            entryPrice - stopLossPrice
+            entryPrice -
+            stopLossPrice
+        );
+
+
+    if (
+        riskPerUnit <= 0
+    ) {
+
+        alert(
+            "Entry Price and Stop Loss cannot be same."
+        );
+
+        return;
+    }
+
+
+    const quantity =
+        Math.floor(
+            riskAmount /
+            riskPerUnit
+        );
+
+
+    document.getElementById(
+        "positionRisk"
+    ).innerText =
+        riskAmount.toFixed(2);
+
+
+    document.getElementById(
+        "riskPerUnit"
+    ).innerText =
+        riskPerUnit.toFixed(2);
+
+
+    document.getElementById(
+        "positionQuantity"
+    ).innerText =
+        quantity;
+
+
+    /* DAY 28 */
+
+    updateRiskDashboard();
+
+
+    /* DAY 29 */
+
+    saveRiskHistory();
+}
+
+
+/* =========================================================
+   DAY 28 — RISK DASHBOARD
+   ========================================================= */
+
+function updateRiskDashboard() {
+
+    const capital =
+        Number(
+            document.getElementById(
+                "capital"
+            )?.value
+        ) || 0;
+
+
+    const riskPercent =
+        Number(
+            document.getElementById(
+                "riskPercent"
+            )?.value
+        ) || 0;
+
+
+    const entryPrice =
+        Number(
+            document.getElementById(
+                "entryPrice"
+            )?.value
+        ) || 0;
+
+
+    const stopLossPrice =
+        Number(
+            document.getElementById(
+                "stopLossPrice"
+            )?.value
+        ) || 0;
+
+
+    const riskAmount =
+        capital *
+        (riskPercent / 100);
+
+
+    const riskPerUnit =
+        Math.abs(
+            entryPrice -
+            stopLossPrice
         );
 
 
     const positionSize =
         riskPerUnit > 0
             ? Math.floor(
-                riskAmount / riskPerUnit
+                riskAmount /
+                riskPerUnit
             )
             : 0;
 
@@ -980,25 +1091,29 @@ function updateRiskDashboard() {
     );
 
 
-    /* -----------------------------------------
-       Risk / Reward
-       ----------------------------------------- */
+    /* Risk / Reward */
 
     const rrEntry =
         Number(
-            document.getElementById("rrEntry")?.value
+            document.getElementById(
+                "rrEntry"
+            )?.value
         ) || 0;
 
 
     const rrStopLoss =
         Number(
-            document.getElementById("rrStopLoss")?.value
+            document.getElementById(
+                "rrStopLoss"
+            )?.value
         ) || 0;
 
 
     const rrTarget =
         Number(
-            document.getElementById("rrTarget")?.value
+            document.getElementById(
+                "rrTarget"
+            )?.value
         ) || 0;
 
 
@@ -1013,20 +1128,25 @@ function updateRiskDashboard() {
 
         const risk =
             Math.abs(
-                rrEntry - rrStopLoss
+                rrEntry -
+                rrStopLoss
             );
 
 
         const reward =
             Math.abs(
-                rrTarget - rrEntry
+                rrTarget -
+                rrEntry
             );
 
 
-        if (risk > 0) {
+        if (
+            risk > 0
+        ) {
 
             rr =
-                reward / risk;
+                reward /
+                risk;
 
         }
 
@@ -1041,7 +1161,259 @@ function updateRiskDashboard() {
 
 
 /* =========================================================
-   MASTER DASHBOARD REFRESH
+   DAY 29 — SAVE TRADE RISK HISTORY
+   ========================================================= */
+
+function saveRiskHistory() {
+
+    const capital =
+        Number(
+            document.getElementById(
+                "capital"
+            )?.value
+        ) || 0;
+
+
+    const riskPercent =
+        Number(
+            document.getElementById(
+                "riskPercent"
+            )?.value
+        ) || 0;
+
+
+    const entryPrice =
+        Number(
+            document.getElementById(
+                "entryPrice"
+            )?.value
+        ) || 0;
+
+
+    const stopLossPrice =
+        Number(
+            document.getElementById(
+                "stopLossPrice"
+            )?.value
+        ) || 0;
+
+
+    if (
+        capital <= 0 ||
+        riskPercent <= 0 ||
+        entryPrice <= 0 ||
+        stopLossPrice <= 0
+    ) {
+
+        return;
+    }
+
+
+    const riskAmount =
+        capital *
+        (riskPercent / 100);
+
+
+    const riskPerUnit =
+        Math.abs(
+            entryPrice -
+            stopLossPrice
+        );
+
+
+    if (
+        riskPerUnit <= 0
+    ) {
+
+        return;
+    }
+
+
+    const quantity =
+        Math.floor(
+            riskAmount /
+            riskPerUnit
+        );
+
+
+    const riskTrade = {
+
+        capital:
+            capital,
+
+        riskPercent:
+            riskPercent,
+
+        entryPrice:
+            entryPrice,
+
+        stopLossPrice:
+            stopLossPrice,
+
+        riskAmount:
+            riskAmount,
+
+        riskPerUnit:
+            riskPerUnit,
+
+        quantity:
+            quantity,
+
+        date:
+            new Date().toLocaleString()
+
+    };
+
+
+    let history =
+        JSON.parse(
+            localStorage.getItem(
+                "pradhan16_risk_history"
+            ) || "[]"
+        );
+
+
+    history.push(
+        riskTrade
+    );
+
+
+    localStorage.setItem(
+        "pradhan16_risk_history",
+        JSON.stringify(history)
+    );
+
+
+    displayRiskHistory();
+}
+
+
+/* =========================================================
+   DAY 29 — DISPLAY RISK HISTORY
+   ========================================================= */
+
+function displayRiskHistory() {
+
+    const container =
+        document.getElementById(
+            "riskHistory"
+        );
+
+
+    if (!container) return;
+
+
+    const history =
+        JSON.parse(
+            localStorage.getItem(
+                "pradhan16_risk_history"
+            ) || "[]"
+        );
+
+
+    if (
+        history.length === 0
+    ) {
+
+        container.innerHTML =
+            "<p>No risk history yet.</p>";
+
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    history
+        .slice()
+        .reverse()
+        .forEach(
+            (trade, index) => {
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.innerHTML = `
+
+                    <hr>
+
+                    <h3>
+                        Risk Trade
+                        ${history.length - index}
+                    </h3>
+
+                    <p>
+                        Capital:
+                        ₹${Number(
+                            trade.capital
+                        ).toFixed(2)}
+                    </p>
+
+                    <p>
+                        Risk:
+                        ${Number(
+                            trade.riskPercent
+                        ).toFixed(2)}%
+                    </p>
+
+                    <p>
+                        Entry:
+                        ₹${Number(
+                            trade.entryPrice
+                        ).toFixed(2)}
+                    </p>
+
+                    <p>
+                        Stop Loss:
+                        ₹${Number(
+                            trade.stopLossPrice
+                        ).toFixed(2)}
+                    </p>
+
+                    <p>
+                        Risk Amount:
+                        ₹${Number(
+                            trade.riskAmount
+                        ).toFixed(2)}
+                    </p>
+
+                    <p>
+                        Risk Per Unit:
+                        ₹${Number(
+                            trade.riskPerUnit
+                        ).toFixed(2)}
+                    </p>
+
+                    <p>
+                        Position Size:
+                        ${Number(
+                            trade.quantity
+                        )}
+                    </p>
+
+                    <p>
+                        Date:
+                        ${trade.date}
+                    </p>
+
+                `;
+
+
+                container.appendChild(
+                    div
+                );
+
+            }
+        );
+}
+
+
+/* =========================================================
+   REFRESH COMPLETE DASHBOARD
    ========================================================= */
 
 function refreshDashboard() {
@@ -1063,7 +1435,7 @@ function refreshDashboard() {
 
 
 /* =========================================================
-   PAGE LOAD
+   LOAD APP
    ========================================================= */
 
 window.addEventListener(
@@ -1074,180 +1446,3 @@ window.addEventListener(
 
     }
 );
-/* =========================================================
-   DAY 29 — TRADE RISK HISTORY
-   ========================================================= */
-
-function saveRiskHistory() {
-
-    const capital =
-        Number(document.getElementById("capital")?.value) || 0;
-
-    const riskPercent =
-        Number(document.getElementById("riskPercent")?.value) || 0;
-
-    const entryPrice =
-        Number(document.getElementById("entryPrice")?.value) || 0;
-
-    const stopLossPrice =
-        Number(document.getElementById("stopLossPrice")?.value) || 0;
-
-    if (
-        capital <= 0 ||
-        riskPercent <= 0 ||
-        entryPrice <= 0 ||
-        stopLossPrice <= 0
-    ) {
-        return;
-    }
-
-    const riskAmount =
-        capital * (riskPercent / 100);
-
-    const riskPerUnit =
-        Math.abs(entryPrice - stopLossPrice);
-
-    if (riskPerUnit <= 0) {
-        return;
-    }
-
-    const quantity =
-        Math.floor(riskAmount / riskPerUnit);
-
-    const riskTrade = {
-
-        capital: capital,
-
-        riskPercent: riskPercent,
-
-        entryPrice: entryPrice,
-
-        stopLossPrice: stopLossPrice,
-
-        riskAmount: riskAmount,
-
-        riskPerUnit: riskPerUnit,
-
-        quantity: quantity,
-
-        date: new Date().toLocaleString()
-
-    };
-
-
-    let history =
-        JSON.parse(
-            localStorage.getItem(
-                "pradhan16_risk_history"
-            ) || "[]"
-        );
-
-
-    history.push(riskTrade);
-
-
-    localStorage.setItem(
-        "pradhan16_risk_history",
-        JSON.stringify(history)
-    );
-
-
-    displayRiskHistory();
-}
-
-
-/* =========================================================
-   DISPLAY RISK HISTORY
-   ========================================================= */
-
-function displayRiskHistory() {
-
-    const container =
-        document.getElementById("riskHistory");
-
-    if (!container) return;
-
-
-    const history =
-        JSON.parse(
-            localStorage.getItem(
-                "pradhan16_risk_history"
-            ) || "[]"
-        );
-
-
-    if (history.length === 0) {
-
-        container.innerHTML =
-            "<p>No risk history yet.</p>";
-
-        return;
-    }
-
-
-    container.innerHTML = "";
-
-
-    history.slice().reverse().forEach(
-        (trade, index) => {
-
-            const div =
-                document.createElement("div");
-
-
-            div.innerHTML = `
-
-                <hr>
-
-                <h3>
-                    Trade ${history.length - index}
-                </h3>
-
-                <p>
-                    Capital:
-                    ₹${trade.capital.toFixed(2)}
-                </p>
-
-                <p>
-                    Risk:
-                    ${trade.riskPercent.toFixed(2)}%
-                </p>
-
-                <p>
-                    Entry:
-                    ₹${trade.entryPrice.toFixed(2)}
-                </p>
-
-                <p>
-                    Stop Loss:
-                    ₹${trade.stopLossPrice.toFixed(2)}
-                </p>
-
-                <p>
-                    Risk Amount:
-                    ₹${trade.riskAmount.toFixed(2)}
-                </p>
-
-                <p>
-                    Risk Per Unit:
-                    ₹${trade.riskPerUnit.toFixed(2)}
-                </p>
-
-                <p>
-                    Position Size:
-                    ${trade.quantity}
-                </p>
-
-                <p>
-                    Date:
-                    ${trade.date}
-                </p>
-
-            `;
-
-
-            container.appendChild(div);
-
-        }
-    );
-}
