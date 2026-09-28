@@ -675,6 +675,8 @@ function refreshDashboard() {
 
     calculateRiskMetrics();
 
+    updateRiskDashboard();
+
 }
 
 
