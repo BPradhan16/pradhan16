@@ -1508,3 +1508,124 @@ document.addEventListener(
 
     }
 );
+/* =========================================================
+   DAY 30 — PERFORMANCE DASHBOARD
+   ========================================================= */
+
+function calculatePerformanceDashboard() {
+
+    const trades = getTrades();
+
+    if (trades.length === 0) {
+
+        setText("performanceTotalTrades", "0");
+        setText("performanceWinningTrades", "0");
+        setText("performanceLosingTrades", "0");
+        setText("performanceTotalPL", "₹0.00");
+        setText("performanceAveragePL", "₹0.00");
+        setText("performanceBestTrade", "₹0.00");
+        setText("performanceWorstTrade", "₹0.00");
+
+        return;
+    }
+
+
+    const profits = trades.map(
+        function (trade) {
+
+            return Number(
+                trade.profitLoss
+            ) || 0;
+
+        }
+    );
+
+
+    const totalTrades =
+        profits.length;
+
+
+    const winningTrades =
+        profits.filter(
+            function (profit) {
+
+                return profit > 0;
+
+            }
+        ).length;
+
+
+    const losingTrades =
+        profits.filter(
+            function (profit) {
+
+                return profit < 0;
+
+            }
+        ).length;
+
+
+    const totalPL =
+        profits.reduce(
+            function (sum, profit) {
+
+                return sum + profit;
+
+            },
+            0
+        );
+
+
+    const averagePL =
+        totalPL / totalTrades;
+
+
+    const bestTrade =
+        Math.max(...profits);
+
+
+    const worstTrade =
+        Math.min(...profits);
+
+
+    setText(
+        "performanceTotalTrades",
+        totalTrades
+    );
+
+
+    setText(
+        "performanceWinningTrades",
+        winningTrades
+    );
+
+
+    setText(
+        "performanceLosingTrades",
+        losingTrades
+    );
+
+
+    setText(
+        "performanceTotalPL",
+        "₹" + totalPL.toFixed(2)
+    );
+
+
+    setText(
+        "performanceAveragePL",
+        "₹" + averagePL.toFixed(2)
+    );
+
+
+    setText(
+        "performanceBestTrade",
+        "₹" + bestTrade.toFixed(2)
+    );
+
+
+    setText(
+        "performanceWorstTrade",
+        "₹" + worstTrade.toFixed(2)
+    );
+}
