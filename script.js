@@ -1483,7 +1483,8 @@ function refreshDashboard() {
     displayRiskHistory();
 
     updateRiskDashboard();
-
+  
+    calculatePerformanceDashboard();
 
     console.log(
         "Pradhan16 AI Dashboard Refreshed"
