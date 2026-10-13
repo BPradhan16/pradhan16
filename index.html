@@ -1,471 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pradhan16 AI Trading</title>
+  <link rel="stylesheet" href="style.css">
 
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Pradhan16 AI</title>
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+  <!-- Chart.js for P/L chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
-
 <body>
 
+  <header class="header">
+    <h1>Pradhan16 AI Trading</h1>
+    <p>Trade Journal • Risk Management • Performance</p>
+  </header>
 
-<div class="container">
+  <main class="container">
 
-    <!-- =========================================
-         APP TITLE
-         ========================================= -->
-
-    <h1>Pradhan16 AI</h1>
-
-    <h2>AI Trading Journal</h2>
-
-
-    <!-- =========================================
-         TRADING JOURNAL
-         ========================================= -->
-
-    <section class="dashboard-card">
-
-        <h2>📒 Trading Journal</h2>
-
-        <button onclick="openJournal()">
-            Open Trading Journal
-        </button>
-
-
-        <div id="journal" style="display:none;">
-
-            <input
-                type="text"
-                id="symbol"
-                placeholder="Symbol"
-            >
-
-            <input
-                type="number"
-                id="entry"
-                placeholder="Entry Price"
-            >
-
-            <input
-                type="number"
-                id="exit"
-                placeholder="Exit Price"
-            >
-
-            <input
-                type="number"
-                id="quantity"
-                placeholder="Quantity"
-            >
-
-            <br><br>
-
-
-            <button onclick="calculatePL()">
-                Calculate P/L
-            </button>
-
-
-            <p id="plMessage"></p>
-
-
-            <button onclick="saveTrade()">
-                Save Trade
-            </button>
-
-
-            <p id="tradeMessage"></p>
-
-
-            <button onclick="openReview()">
-                Review Trades
-            </button>
-
-
-            <div id="review" style="display:none;">
-
-                <h3>Trade History</h3>
-
-                <div id="tradeList"></div>
-
-            </div>
-
+    <section class="panel">
+      <h2>Trading Dashboard</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span>Total Trades</span>
+          <strong id="totalTrades">0</strong>
         </div>
-
-    </section>
-
-
-
-    <!-- =========================================
-         DAY 20 — TRADING STATISTICS
-         ========================================= -->
-
-    <section class="dashboard-card">
-
-        <h2>📊 Trading Statistics</h2>
-
-        <p>
-            Total Trades:
-            <span id="totalTrades">0</span>
-        </p>
-
-        <p>
-            Winning Trades:
-            <span id="winningTrades">0</span>
-        </p>
-
-        <p>
-            Losing Trades:
-            <span id="losingTrades">0</span>
-        </p>
-
-        <p>
-            Win Rate:
-            <span id="winRate">0%</span>
-        </p>
-
-        <p>
-            Gross Profit:
-            ₹<span id="grossProfit">0.00</span>
-        </p>
-
-        <p>
-            Gross Loss:
-            ₹<span id="grossLoss">0.00</span>
-        </p>
-
-        <p>
-            Average Profit:
-            ₹<span id="averageProfit">0.00</span>
-        </p>
-
-        <p>
-            Average Loss:
-            ₹<span id="averageLoss">0.00</span>
-        </p>
-
-        <p>
-            Profit Factor:
-            <span id="profitFactor">0.00</span>
-        </p>
-
-        <p>
-            Expectancy:
-            ₹<span id="expectancy">0.00</span>
-        </p>
-
-    </section>
-
-
-
-    <!-- =========================================
-         DAY 21 — P/L CHART
-         ========================================= -->
-
-    <section class="dashboard-card">
-
-        <h2>📈 Profit / Loss Chart</h2>
-
-        <div style="height:300px;">
-
-            <canvas id="plChart"></canvas>
-
+        <div class="stat-card">
+          <span>Winning Trades</span>
+          <strong id="winningTrades">0</strong>
         </div>
-
-    </section>
-
-
-
-    <!-- =========================================
-         DAY 23 — EQUITY CURVE
-         ========================================= -->
-
-    <section class="dashboard-card">
-
-        <h2>📈 Equity Curve</h2>
-
-        <div style="height:300px;">
-
-            <canvas id="equityChart"></canvas>
-
+        <div class="stat-card">
+          <span>Win Rate</span>
+          <strong id="winRate">0%</strong>
         </div>
-
-    </section>
-
-
-
-    <!-- =========================================
-         DAY 24 — DRAWDOWN
-         ========================================= -->
-
-    <section class="dashboard-card">
-
-        <h2>📉 Drawdown Analysis</h2>
-
-        <p>
-            Current Drawdown:
-            ₹<span id="currentDrawdown">0.00</span>
-        </p>
-
-        <p>
-            Maximum Drawdown:
-            ₹<span id="maxDrawdown">0.00</span>
-        </p>
-
-        <p>
-            Peak P/L:
-            ₹<span id="peakPL">0.00</span>
-        </p>
-
-        <p>
-            Current P/L:
-            ₹<span id="currentPL">0.00</span>
-        </p>
-
-    </section>
-
-
-
-    <!-- =========================================
-         DAY 25 — RISK METRICS
-         ========================================= -->
-
-    <section class="dashboard-card">
-
-        <h2>🛡️ Risk Metrics</h2>
-
-        <p>
-            Average Risk:
-            ₹<span id="averageRisk">0.00</span>
-        </p>
-
-        <p>
-            Maximum Risk:
-            ₹<span id="maximumRisk">0.00</span>
-        </p>
-
-        <p>
-            Average Reward:
-            ₹<span id="averageReward">0.00</span>
-        </p>
-
-        <p>
-            Average Risk/Reward:
-            <span id="averageRR">0.00</span>
-        </p>
-
-        <p>
-            Risk Consistency:
-            <span id="riskConsistency">0%</span>
-        </p>
-
-    </section>
-
-
-
-    <!-- =========================================
-         DAY 26 — RISK / REWARD CALCULATOR
-         ========================================= -->
-
-    <section class="dashboard-card">
-
-        <h2>⚖️ Risk / Reward Calculator</h2>
-
-        <input
-            type="number"
-            id="rrEntry"
-            placeholder="Entry Price"
-        >
-
-        <input
-            type="number"
-            id="rrStopLoss"
-            placeholder="Stop Loss"
-        >
-
-        <input
-            type="number"
-            id="rrTarget"
-            placeholder="Target Price"
-        >
-
-        <input
-            type="number"
-            id="rrQuantity"
-            placeholder="Quantity"
-        >
-
-        <button onclick="calculateRiskReward()">
-            Calculate Risk / Reward
-        </button>
-
-        <p>
-            Risk Amount:
-            ₹<span id="riskAmount">0.00</span>
-        </p>
-
-        <p>
-            Reward Amount:
-            ₹<span id="rewardAmount">0.00</span>
-        </p>
-
-        <p>
-            Risk / Reward Ratio:
-            <span id="riskRewardRatio">0.00</span>
-        </p>
-
-        <p id="rrStatus"></p>
-
-    </section>
-
-
-
-    <!-- =========================================
-         DAY 27 — POSITION SIZE CALCULATOR
-         ========================================= -->
-
-    <section class="dashboard-card">
-
-        <h2>📐 Position Size Calculator</h2>
-
-        <input
-            type="number"
-            id="capital"
-            placeholder="Total Capital"
-        >
-
-        <input
-            type="number"
-            id="riskPercent"
-            placeholder="Risk % per Trade"
-        >
-
-        <input
-            type="number"
-            id="entryPrice"
-            placeholder="Entry Price"
-        >
-
-        <input
-            type="number"
-            id="stopLossPrice"
-            placeholder="Stop Loss Price"
-        >
-
-        <button onclick="calculatePositionSize()">
-            Calculate Position Size
-        </button>
-
-        <p>
-            Risk Amount:
-            ₹<span id="positionRisk">0.00</span>
-        </p>
-
-        <p>
-            Risk Per Unit:
-            ₹<span id="riskPerUnit">0.00</span>
-        </p>
-
-        <p>
-            Suggested Quantity:
-            <span id="positionQuantity">0</span>
-        </p>
-
-    </section>
-
-
-
-    <!-- =========================================
-         DAY 28 — RISK DASHBOARD
-         ========================================= -->
-
-    <section class="dashboard-card">
-
-        <h2>🛡️ Risk Dashboard</h2>
-
-        <p>
-            Capital:
-            ₹<span id="dashboardCapital">0.00</span>
-        </p>
-
-        <p>
-            Risk %:
-            <span id="dashboardRiskPercent">0%</span>
-        </p>
-
-        <p>
-            Risk Amount:
-            ₹<span id="dashboardRiskAmount">0.00</span>
-        </p>
-
-        <p>
-            Risk Per Unit:
-            ₹<span id="dashboardRiskPerUnit">0.00</span>
-        </p>
-
-        <p>
-            Position Size:
-            <span id="dashboardPositionSize">0</span>
-        </p>
-
-        <p>
-            Risk / Reward:
-            <span id="dashboardRR">0.00</span>
-        </p>
-
-    </section>
-
-
-
-    <!-- =========================================
-         DAY 29 — TRADE RISK HISTORY
-         ========================================= -->
-
-    <section class="dashboard-card">
-
-        <h2>📋 Trade Risk History</h2>
-
-        <div id="riskHistory">
-
-            <p>No risk history yet.</p>
-
+        <div class="stat-card">
+          <span>Total P/L</span>
+          <strong id="totalPL">₹0.00</strong>
         </div>
-
+      </div>
     </section>
 
+    <section class="panel">
+      <h2>Add New Trade</h2>
 
-</div>
+      <form id="tradeForm">
+        <label for="symbol">Symbol / Instrument</label>
+        <input id="symbol" type="text" placeholder="e.g. NIFTY" required>
 
+        <label for="side">Trade Side</label>
+        <select id="side" required>
+          <option value="Buy">Buy</option>
+          <option value="Sell">Sell</option>
+        </select>
 
-<!-- =========================================
-     CHART.JS
-     ========================================= -->
+        <label for="entry">Entry Price (₹)</label>
+        <input id="entry" type="number" min="0.01" step="any" required>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <label for="exit">Exit Price (₹)</label>
+        <input id="exit" type="number" min="0.01" step="any" required>
 
+        <label for="tradeStopLoss">Stop-loss Price (₹)</label>
+        <input id="tradeStopLoss" type="number" min="0.01" step="any" required>
 
-<!-- =========================================
-     PRADHAN16 AI JAVASCRIPT
-     ========================================= -->
+        <label for="tradeTarget">Target Price (₹)</label>
+        <input id="tradeTarget" type="number" min="0.01" step="any" required>
 
-<script src="script.js"></script>
+        <label for="quantity">Quantity (units, not lots)</label>
+        <input id="quantity" type="number" min="1" step="1" required>
 
+        <button type="submit">Save Trade</button>
+      </form>
+      <p class="note">For options, enter the total number of units. If you enter lots, convert lots into units first.</p>
+      <p id="tradeMessage" class="message" aria-live="polite"></p>
+    </section>
 
+    <section class="panel">
+      <h2>Risk Metrics Dashboard</h2>
+      <p class="note">Planned risk is calculated from entry price and stop-loss, not from the actual exit.</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span>Average Risk</span>
+          <strong id="averageRisk">—</strong>
+        </div>
+        <div class="stat-card">
+          <span>Maximum Risk</span>
+          <strong id="maximumRisk">—</strong>
+        </div>
+        <div class="stat-card">
+          <span>Average Reward</span>
+          <strong id="averageReward">—</strong>
+        </div>
+        <div class="stat-card">
+          <span>Average Risk/Reward</span>
+          <strong id="averageRR">—</strong>
+        </div>
+        <div class="stat-card">
+          <span>Risk Variation</span>
+          <strong id="riskConsistency">—</strong>
+        </div>
+      </div>
+      <p id="riskMessage" class="message" aria-live="polite"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Position Size Calculator</h2>
+
+      <label for="capital">Trading Capital (₹)</label>
+      <input id="capital" type="number" min="1" step="any" value="10000">
+
+      <label for="riskPercent">Risk per Trade (%)</label>
+      <input id="riskPercent" type="number" min="0.01" max="100" step="any" value="1">
+
+      <label for="entryPrice">Entry Price (₹)</label>
+      <input id="entryPrice" type="number" min="0.01" step="any" value="100">
+
+      <label for="stopLossPrice">Stop-loss Price (₹)</label>
+      <input id="stopLossPrice" type="number" min="0.01" step="any" value="98">
+
+      <button id="calculatePositionButton" type="button">Calculate Position Size</button>
+
+      <div class="calculator-results">
+        <p>Maximum planned loss: <strong id="positionRisk">—</strong></p>
+        <p>Suggested quantity: <strong id="positionQuantity">—</strong></p>
+        <p>Estimated position value: <strong id="positionValue">—</strong></p>
+      </div>
+      <p id="positionMessage" class="message" aria-live="polite"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Profit / Loss Chart</h2>
+      <div class="chart-container">
+        <canvas id="plChart"></canvas>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <h2>Trade History</h2>
+        <button id="exportButton" type="button" class="secondary-button">Export CSV</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Symbol</th>
+              <th>Side</th>
+              <th>Entry</th>
+              <th>Exit</th>
+              <th>Quantity</th>
+              <th>P/L</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="tradeTableBody">
+            <tr>
+              <td colspan="8">No trades saved yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Data Management</h2>
+      <button id="clearTradesButton" type="button" class="danger-button">
+        Delete All Trades
+      </button>
+      <p class="note">This deletes trade records stored by this app on this browser/device. Export your CSV first if you need a backup.</p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Pradhan16 AI Trading • Educational tool only</p>
+    <p>Not investment advice. Actual trading losses can exceed planned risk.</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
-
 </html>
