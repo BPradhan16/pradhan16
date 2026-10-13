@@ -1,108 +1,245 @@
-/* =========================================
-   Pradhan16 AI — Mobile Responsive CSS
-   ========================================= */
-
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f3f6fb;
+  --card: #ffffff;
+  --text: #182235;
+  --muted: #667085;
+  --primary: #1769ff;
+  --border: #e1e7ef;
+  --green: #12805c;
+  --red: #c62828;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 30px 15px;
-    background: #f5f5f5;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.header {
+  background: #101d35;
+  color: white;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0 0 6px;
+  font-size: 25px;
+}
+
+.header p {
+  margin: 0;
+  color: #d5deee;
+  font-size: 13px;
 }
 
 .container {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 16px;
 }
 
-h1 {
-    font-size: 40px;
-    margin-bottom: 10px;
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 18px;
+  box-shadow: 0 3px 12px rgba(16, 29, 53, 0.04);
 }
 
 h2 {
-    font-size: 26px;
-    margin-bottom: 25px;
+  margin: 0 0 16px;
+  font-size: 19px;
 }
 
-p {
-    font-size: 18px;
-    line-height: 1.6;
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
-/* Input fields */
-
-input {
-    display: block;
-    width: 100%;
-    max-width: 450px;
-    margin: 12px auto;
-    padding: 14px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+.stat-card {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fafcff;
 }
 
-/* Buttons */
+.stat-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.stat-card strong {
+  display: block;
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+
+label {
+  display: block;
+  margin: 13px 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input,
+select {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+  color: var(--text);
+  font-size: 16px;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid #b9d1ff;
+  border-color: var(--primary);
+}
 
 button {
-    width: 100%;
-    max-width: 450px;
-    margin: 10px auto;
-    border: none;
-    border-radius: 8px;
-    padding: 14px 20px;
-    font-size: 16px;
-    cursor: pointer;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 16px;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-/* Journal */
-
-#journal {
-    margin-top: 25px;
-    padding: 20px;
-    background: white;
-    border-radius: 12px;
+button:active {
+  opacity: 0.85;
 }
 
-/* Review */
-
-#review {
-    margin-top: 20px;
-    padding: 15px;
-    background: #f5f5f5;
-    border-radius: 10px;
-    text-align: left;
+.secondary-button {
+  width: auto;
+  margin: 0;
+  background: #e8efff;
+  color: #1748a0;
 }
 
-/* Mobile */
+.danger-button {
+  background: #b42318;
+}
 
-@media (max-width: 600px) {
+.note {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 0;
+}
 
-    body {
-        padding: 20px 12px;
-    }
+.message {
+  color: var(--muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
 
-    h1 {
-        font-size: 30px;
-    }
+.positive {
+  color: var(--green) !important;
+}
 
-    h2 {
-        font-size: 22px;
-    }
+.negative {
+  color: var(--red) !important;
+}
 
-    #journal {
-        padding: 15px;
-    }
+.calculator-results {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f5f8ff;
+}
 
-    input,
-    button {
-        width: 100%;
-        font-size: 16px;
-    }
+.calculator-results p {
+  margin: 8px 0;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  min-height: 250px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.section-heading h2 {
+  margin: 0;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 14px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 8px;
+  text-align: left;
+}
+
+th {
+  background: #f5f7fb;
+}
+
+.delete-one {
+  width: auto;
+  min-height: 32px;
+  margin: 0;
+  padding: 6px 9px;
+  font-size: 12px;
+  background: #b42318;
+}
+
+footer {
+  text-align: center;
+  padding: 18px 14px 28px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+footer p {
+  margin: 5px 0;
+}
+
+@media (min-width: 700px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .panel {
+    padding: 22px;
+  }
 }
